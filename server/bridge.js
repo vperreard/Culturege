@@ -1,17 +1,22 @@
 /**
  * Bridge Server - Connects the PWA to Claude Code CLI
  *
- * PARALLEL ARCHITECTURE:
- * ┌─────────────────────────────────────────────────────────────┐
- * │  Phase 1 (parallel)     Phase 2 (parallel)     Phase 3     │
- * │  ┌──────────────┐       ┌──────────────┐                   │
- * │  │  Recherche   │       │    Fiche     │                   │
- * │  └──────────────┘       └──────────────┘       ┌────────┐  │
- * │         +          ───▶        +          ───▶ │Assembly│  │
- * │  ┌──────────────┐       ┌──────────────┐       └────────┘  │
- * │  │   Images     │       │  Questions   │                   │
- * │  └──────────────┘       └──────────────┘                   │
- * └─────────────────────────────────────────────────────────────┘
+ * SMART PARALLEL ARCHITECTURE:
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │  Phase 1 (parallel)       Phase 2 (sequential)    Phase 3          │
+ * │  ┌──────────────┐                                                  │
+ * │  │  Recherche   │─────┐    ┌──────────────┐      ┌──────────────┐  │
+ * │  └──────────────┘     ├───▶│    Fiche     │─────▶│  Questions   │  │
+ * │         +             │    │ (+ images)   │      │(basées fiche)│  │
+ * │  ┌──────────────┐     │    └──────────────┘      └──────────────┘  │
+ * │  │   Images     │─────┘                                            │
+ * │  └──────────────┘                                                  │
+ * └─────────────────────────────────────────────────────────────────────┘
+ *
+ * Why this order:
+ * - Research + Images can run in parallel (both based on topic)
+ * - Fiche needs research AND images to place them correctly
+ * - Questions MUST come after fiche to reference actual content
  *
  * Usage: node server/bridge.js
  * Port: 7001
@@ -264,77 +269,99 @@ Format JSON:
     console.log(`\n✅ Phase 1 terminée en ${gen.stats.phase1.duration}s`)
 
     // ════════════════════════════════════════════════════════════
-    // PHASE 2: Fiche + Questions EN PARALLÈLE
+    // PHASE 2: Rédaction de la Fiche (SÉQUENTIEL - a besoin des images)
     // ════════════════════════════════════════════════════════════
     console.log(`\n┌─────────────────────────────────────────────────────────┐`)
-    console.log(`│  PHASE 2: Fiche + Questions (PARALLÈLE)                 │`)
+    console.log(`│  PHASE 2: Rédaction de la Fiche (avec images)           │`)
     console.log(`└─────────────────────────────────────────────────────────┘`)
 
     gen.phase = 2
-    gen.progress = 'Phase 2: Fiche + Questions en parallèle...'
+    gen.progress = 'Phase 2: Rédaction de la fiche...'
 
     const fichePrompt = `
 Tu es dans le projet CultureMaster. Crée une fiche EXCEPTIONNELLE sur "${topic}".
 
-CONTEXTE:
-- Recherche disponible dans: ${workspacePaths.research}
-- Images disponibles dans: ${workspacePaths.images}
+CONTEXTE DISPONIBLE:
+- Recherche complète: ${workspacePaths.research}
+- Images trouvées: ${workspacePaths.images}
 
 INSTRUCTIONS:
 1. Lis d'abord .claude/agents/fiche-writer.md pour le format exact
 2. Lis la recherche: ${workspacePaths.research}
-3. Lis les images: ${workspacePaths.images}
+3. Lis les images disponibles: ${workspacePaths.images}
 4. Crée une fiche avec:
-   - heroImage (depuis les images trouvées)
+   - heroImage: choisis la meilleure image comme hero
    - 5-7 sections riches (4-5 paragraphes chacune)
+   - INTÈGRE les images dans les sections appropriées (image.position: "left", "right", "full")
    - timeline narrative avec stories détaillées
    - mythes vs réalité (format flip cards)
-   - images intégrées dans les sections
 5. Sauvegarde dans: ${workspacePaths.fiche}
 
-IMPORTANT: Le contenu doit être PROFOND, pas superficiel. Chaque section = mini-article.
-`
-
-    const questionsPrompt = `
-Tu es dans le projet CultureMaster. Crée des questions QCM sur "${topic}".
-
-CONTEXTE:
-- Recherche disponible dans: ${workspacePaths.research}
-
-INSTRUCTIONS:
-1. Lis d'abord .claude/agents/qcm-generator.md
-2. Lis la recherche: ${workspacePaths.research}
-3. Crée 10 questions variées:
-   - 3 faciles (définitions, faits de base)
-   - 4 moyennes (compréhension, liens)
-   - 3 difficiles (analyse, détails)
-4. Chaque question: 4 options, 1 bonne réponse, explication
-5. Sauvegarde dans: ${workspacePaths.questions}
-
-Format JSON: { "questions": [...] }
+IMPORTANT:
+- Le contenu doit être PROFOND, pas superficiel. Chaque section = mini-article.
+- Place les images là où elles illustrent le mieux le texte.
+- Assure-toi que chaque fait important soit bien expliqué (pour les questions après).
 `
 
     const phase2Start = Date.now()
-    const [ficheResult, questionsResult] = await Promise.all([
-      spawnClaudeTask(fichePrompt, 'Fiche', gen, workspacePaths.fiche),
-      spawnClaudeTask(questionsPrompt, 'Questions', gen, workspacePaths.questions)
-    ])
+    const ficheResult = await spawnClaudeTask(fichePrompt, 'Fiche', gen, workspacePaths.fiche)
 
     gen.stats.phase2 = {
       duration: ((Date.now() - phase2Start) / 1000).toFixed(1),
-      ficheTools: ficheResult.toolCalls,
-      questionsTools: questionsResult.toolCalls
+      ficheTools: ficheResult.toolCalls
     }
     console.log(`\n✅ Phase 2 terminée en ${gen.stats.phase2.duration}s`)
 
     // ════════════════════════════════════════════════════════════
-    // PHASE 3: Assemblage final
+    // PHASE 3: Création des Questions (SÉQUENTIEL - basées sur la fiche)
     // ════════════════════════════════════════════════════════════
     console.log(`\n┌─────────────────────────────────────────────────────────┐`)
-    console.log(`│  PHASE 3: Assemblage final                              │`)
+    console.log(`│  PHASE 3: Questions QCM (basées sur la fiche)           │`)
     console.log(`└─────────────────────────────────────────────────────────┘`)
 
     gen.phase = 3
+    gen.progress = 'Phase 3: Création des questions...'
+
+    const questionsPrompt = `
+Tu es dans le projet CultureMaster. Crée des questions QCM sur "${topic}".
+
+CONTEXTE - LIS CES FICHIERS:
+- La fiche rédigée: ${workspacePaths.fiche}
+- La recherche: ${workspacePaths.research}
+
+INSTRUCTIONS CRITIQUES:
+1. Lis d'abord .claude/agents/qcm-generator.md
+2. Lis ATTENTIVEMENT la fiche: ${workspacePaths.fiche}
+3. Crée 10 questions dont les réponses se trouvent DANS LA FICHE:
+   - 3 faciles (définitions, faits de base mentionnés dans la fiche)
+   - 4 moyennes (compréhension des concepts expliqués)
+   - 3 difficiles (détails spécifiques de la fiche)
+4. Chaque question: 4 options, 1 bonne réponse, explication avec référence à la section
+5. Sauvegarde dans: ${workspacePaths.questions}
+
+RÈGLE D'OR: Chaque bonne réponse DOIT pouvoir être trouvée dans le contenu de la fiche.
+Indique dans l'explication: "Cette information se trouve dans la section [X]"
+
+Format JSON: { "questions": [...] }
+`
+
+    const phase3Start = Date.now()
+    const questionsResult = await spawnClaudeTask(questionsPrompt, 'Questions', gen, workspacePaths.questions)
+
+    gen.stats.phase3 = {
+      duration: ((Date.now() - phase3Start) / 1000).toFixed(1),
+      questionsTools: questionsResult.toolCalls
+    }
+    console.log(`\n✅ Phase 3 terminée en ${gen.stats.phase3.duration}s`)
+
+    // ════════════════════════════════════════════════════════════
+    // PHASE 4: Assemblage final
+    // ════════════════════════════════════════════════════════════
+    console.log(`\n┌─────────────────────────────────────────────────────────┐`)
+    console.log(`│  PHASE 4: Assemblage final                              │`)
+    console.log(`└─────────────────────────────────────────────────────────┘`)
+
+    gen.phase = 4
     gen.progress = 'Assemblage final...'
 
     // Read the generated files and assemble
@@ -375,8 +402,9 @@ Format JSON: { "questions": [...] }
       console.log(`\n${'═'.repeat(60)}`)
       console.log(`✅ GÉNÉRATION TERMINÉE !`)
       console.log(`   📊 Durée totale: ${totalDuration}s`)
-      console.log(`   📊 Phase 1: ${gen.stats.phase1.duration}s`)
-      console.log(`   📊 Phase 2: ${gen.stats.phase2.duration}s`)
+      console.log(`   📊 Phase 1 (Recherche+Images): ${gen.stats.phase1.duration}s`)
+      console.log(`   📊 Phase 2 (Fiche): ${gen.stats.phase2.duration}s`)
+      console.log(`   📊 Phase 3 (Questions): ${gen.stats.phase3.duration}s`)
       console.log(`${'═'.repeat(60)}\n`)
     } else {
       throw new Error('Impossible d\'assembler le résultat final')
@@ -437,31 +465,32 @@ app.get('/health', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`
-╔════════════════════════════════════════════════════════════╗
-║                                                            ║
-║   🚀 CultureMaster Bridge Server (PARALLEL MODE)           ║
-║                                                            ║
-║   Port: ${PORT}                                              ║
-║   URL:  http://localhost:${PORT}                             ║
-║                                                            ║
-║   Architecture:                                            ║
-║   ┌────────────┐  ┌────────────┐                           ║
-║   │ Recherche  │  │   Fiche    │                           ║
-║   └─────┬──────┘  └─────┬──────┘                           ║
-║         │ Phase 1       │ Phase 2      ┌──────────┐        ║
-║         ├───────────────┼─────────────▶│ Assembly │        ║
-║         │               │              └──────────┘        ║
-║   ┌─────┴──────┐  ┌─────┴──────┐                           ║
-║   │   Images   │  │ Questions  │                           ║
-║   └────────────┘  └────────────┘                           ║
-║                                                            ║
-║   Endpoints:                                               ║
-║   • POST /generate     - Start parallel generation         ║
-║   • GET  /status/:id   - Check status & phase              ║
-║   • GET  /result/:id   - Get completed result              ║
-║   • GET  /logs/:id     - Get generation logs               ║
-║   • GET  /health       - Health check                      ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   🚀 CultureMaster Bridge Server (SMART PARALLEL)                 ║
+║                                                                   ║
+║   Port: ${PORT}                                                     ║
+║   URL:  http://localhost:${PORT}                                    ║
+║                                                                   ║
+║   Architecture:                                                   ║
+║   ┌────────────┐                                                  ║
+║   │ Recherche  │───┐  Phase 1     ┌────────┐     ┌───────────┐    ║
+║   └────────────┘   ├─────────────▶│ Fiche  │────▶│ Questions │    ║
+║         ║         │   (parallel)  │(+imgs) │     │(sur fiche)│    ║
+║   ┌────────────┐   │               └────────┘     └───────────┘    ║
+║   │   Images   │───┘                Phase 2         Phase 3       ║
+║   └────────────┘                                                  ║
+║                                                                   ║
+║   ✓ Questions basées sur le contenu réel de la fiche              ║
+║   ✓ Images placées aux bons endroits dans le texte                ║
+║                                                                   ║
+║   Endpoints:                                                      ║
+║   • POST /generate     - Lancer une génération                    ║
+║   • GET  /status/:id   - Vérifier statut & phase                  ║
+║   • GET  /result/:id   - Récupérer le résultat                    ║
+║   • GET  /logs/:id     - Voir les logs détaillés                  ║
+║   • GET  /health       - Health check                             ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
   `)
 })
