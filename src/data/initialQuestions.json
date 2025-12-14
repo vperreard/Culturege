@@ -1,0 +1,404 @@
+{
+  "questions": [
+    {
+      "id": "q-hist-001",
+      "categoryId": "histoire",
+      "subcategoryId": "antiquite",
+      "ficheId": "f-rome-republique",
+      "difficulty": 2,
+      "question": "En quelle année Jules César a-t-il franchi le Rubicon, déclenchant la guerre civile ?",
+      "answers": [
+        { "id": "a1", "text": "52 av. J.-C.", "isCorrect": false, "feedback": "C'est l'année de la bataille d'Alésia contre Vercingétorix." },
+        { "id": "a2", "text": "49 av. J.-C.", "isCorrect": true },
+        { "id": "a3", "text": "44 av. J.-C.", "isCorrect": false, "feedback": "C'est l'année de l'assassinat de César aux Ides de mars." },
+        { "id": "a4", "text": "31 av. J.-C.", "isCorrect": false, "feedback": "C'est la bataille d'Actium, victoire d'Octave sur Marc Antoine." }
+      ],
+      "explanation": "Le 10 janvier 49 av. J.-C., César franchit le Rubicon avec ses légions, violant la loi romaine interdisant à tout général de traverser cette rivière en armes.",
+      "anecdote": "La célèbre phrase 'Alea jacta est' (Le sort en est jeté) aurait en réalité été prononcée en grec par César, citant le dramaturge Ménandre.",
+      "tags": ["César", "République romaine", "guerre civile", "Rubicon"],
+      "createdAt": "2024-01-15T10:30:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-hist-002",
+      "categoryId": "histoire",
+      "subcategoryId": "antiquite",
+      "ficheId": "f-rome-republique",
+      "difficulty": 1,
+      "question": "Quel titre portaient les deux magistrats suprêmes de la République romaine, élus pour un an ?",
+      "answers": [
+        { "id": "a1", "text": "Tribuns", "isCorrect": false, "feedback": "Les tribuns de la plèbe défendaient les intérêts du peuple, mais n'étaient pas les magistrats suprêmes." },
+        { "id": "a2", "text": "Préteurs", "isCorrect": false, "feedback": "Les préteurs s'occupaient de la justice et étaient subordonnés aux magistrats suprêmes." },
+        { "id": "a3", "text": "Consuls", "isCorrect": true },
+        { "id": "a4", "text": "Censeurs", "isCorrect": false, "feedback": "Les censeurs réalisaient le recensement et surveillaient les mœurs." }
+      ],
+      "explanation": "Les deux consuls étaient les plus hauts magistrats de Rome. Ils commandaient les armées et présidaient le Sénat. Leur mandat d'un an et leur collégialité visaient à éviter la tyrannie.",
+      "anecdote": "En cas de crise grave, les consuls pouvaient nommer un dictateur pour 6 mois maximum. César fut le premier à se faire nommer dictateur à vie.",
+      "tags": ["République romaine", "institutions", "consuls", "magistratures"],
+      "createdAt": "2024-01-15T10:35:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-hist-003",
+      "categoryId": "histoire",
+      "subcategoryId": "moyen-age",
+      "ficheId": "f-charlemagne",
+      "difficulty": 1,
+      "question": "En quelle année Charlemagne a-t-il été couronné empereur ?",
+      "answers": [
+        { "id": "a1", "text": "768", "isCorrect": false, "feedback": "C'est l'année où Charlemagne devient roi des Francs." },
+        { "id": "a2", "text": "800", "isCorrect": true },
+        { "id": "a3", "text": "814", "isCorrect": false, "feedback": "C'est l'année de la mort de Charlemagne." },
+        { "id": "a4", "text": "843", "isCorrect": false, "feedback": "C'est l'année du traité de Verdun, partage de l'empire entre ses petits-fils." }
+      ],
+      "explanation": "Le 25 décembre 800, le pape Léon III couronne Charlemagne empereur à Rome, restaurant symboliquement l'Empire romain d'Occident.",
+      "anecdote": "Selon Éginhard, biographe de Charlemagne, celui-ci aurait été surpris par ce couronnement et aurait déclaré qu'il ne serait jamais entré dans l'église s'il avait su.",
+      "tags": ["Charlemagne", "empire carolingien", "couronnement", "800"],
+      "createdAt": "2024-01-15T10:40:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-hist-004",
+      "categoryId": "histoire",
+      "subcategoryId": "contemporain",
+      "ficheId": "f-revolution-francaise",
+      "difficulty": 2,
+      "question": "Quel événement marque conventionnellement le début de la Révolution française ?",
+      "answers": [
+        { "id": "a1", "text": "La convocation des États généraux (mai 1789)", "isCorrect": false, "feedback": "Les États généraux préparent le terrain mais ne sont pas considérés comme le début de la Révolution." },
+        { "id": "a2", "text": "La prise de la Bastille (14 juillet 1789)", "isCorrect": true },
+        { "id": "a3", "text": "La nuit du 4 août (1789)", "isCorrect": false, "feedback": "Cette nuit voit l'abolition des privilèges, mais intervient après le début de la Révolution." },
+        { "id": "a4", "text": "La Déclaration des droits de l'homme (26 août 1789)", "isCorrect": false, "feedback": "La DDHC est adoptée après le début de la Révolution." }
+      ],
+      "explanation": "La prise de la Bastille le 14 juillet 1789 symbolise la révolte du peuple contre l'absolutisme royal. Cette forteresse-prison représentait l'arbitraire du pouvoir.",
+      "anecdote": "Ironie de l'histoire : la Bastille ne contenait que 7 prisonniers ce jour-là ! Mais sa valeur symbolique était immense.",
+      "tags": ["Révolution française", "Bastille", "1789", "14 juillet"],
+      "createdAt": "2024-01-15T10:45:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-geo-001",
+      "categoryId": "geographie",
+      "subcategoryId": "europe",
+      "ficheId": "f-fleuves-europe",
+      "difficulty": 1,
+      "question": "Quel est le plus long fleuve d'Europe ?",
+      "answers": [
+        { "id": "a1", "text": "Le Danube", "isCorrect": false, "feedback": "Le Danube (2 850 km) est le deuxième plus long fleuve d'Europe." },
+        { "id": "a2", "text": "Le Rhin", "isCorrect": false, "feedback": "Le Rhin ne fait que 1 233 km." },
+        { "id": "a3", "text": "La Volga", "isCorrect": true },
+        { "id": "a4", "text": "Le Dniepr", "isCorrect": false, "feedback": "Le Dniepr (2 290 km) est le quatrième plus long fleuve d'Europe." }
+      ],
+      "explanation": "La Volga, avec ses 3 690 km, est le plus long fleuve d'Europe. Elle coule entièrement en Russie et se jette dans la mer Caspienne.",
+      "anecdote": "Les Russes surnomment affectueusement la Volga 'Matouchka Volga' (Petite Mère Volga). Elle est célébrée dans de nombreuses chansons populaires russes.",
+      "tags": ["Volga", "fleuves", "Europe", "Russie"],
+      "createdAt": "2024-01-15T11:00:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-geo-002",
+      "categoryId": "geographie",
+      "subcategoryId": "europe",
+      "ficheId": "f-capitales-europe",
+      "difficulty": 2,
+      "question": "Quelle capitale européenne est située sur deux continents ?",
+      "answers": [
+        { "id": "a1", "text": "Moscou", "isCorrect": false, "feedback": "Moscou est entièrement en Europe, bien que la Russie s'étende sur deux continents." },
+        { "id": "a2", "text": "Istanbul", "isCorrect": true },
+        { "id": "a3", "text": "Athènes", "isCorrect": false, "feedback": "Athènes est entièrement en Europe." },
+        { "id": "a4", "text": "Nicosie", "isCorrect": false, "feedback": "Nicosie est sur l'île de Chypre, géographiquement en Asie mais culturellement européenne." }
+      ],
+      "explanation": "Istanbul est à cheval sur l'Europe (rive ouest du Bosphore) et l'Asie (rive est). Le détroit du Bosphore sépare les deux continents.",
+      "anecdote": "Istanbul est la seule ville au monde à être située sur deux continents. Les habitants peuvent littéralement 'passer en Asie' pour le déjeuner !",
+      "tags": ["Istanbul", "Turquie", "Bosphore", "continents"],
+      "createdAt": "2024-01-15T11:05:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-sci-001",
+      "categoryId": "sciences",
+      "subcategoryId": "astronomie",
+      "ficheId": "f-systeme-solaire",
+      "difficulty": 1,
+      "question": "Quelle est la planète la plus proche du Soleil ?",
+      "answers": [
+        { "id": "a1", "text": "Vénus", "isCorrect": false, "feedback": "Vénus est la deuxième planète à partir du Soleil." },
+        { "id": "a2", "text": "Mercure", "isCorrect": true },
+        { "id": "a3", "text": "Mars", "isCorrect": false, "feedback": "Mars est la quatrième planète à partir du Soleil." },
+        { "id": "a4", "text": "La Terre", "isCorrect": false, "feedback": "La Terre est la troisième planète à partir du Soleil." }
+      ],
+      "explanation": "Mercure orbite à environ 58 millions de km du Soleil. Sa proximité avec notre étoile en fait la planète avec les variations de température les plus extrêmes.",
+      "anecdote": "Malgré sa proximité avec le Soleil, Mercure n'est pas la planète la plus chaude ! C'est Vénus, dont l'atmosphère dense crée un effet de serre intense.",
+      "tags": ["Mercure", "système solaire", "planètes", "Soleil"],
+      "createdAt": "2024-01-15T11:10:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-sci-002",
+      "categoryId": "sciences",
+      "subcategoryId": "physique",
+      "ficheId": "f-einstein",
+      "difficulty": 2,
+      "question": "Que représente la célèbre équation E=mc² ?",
+      "answers": [
+        { "id": "a1", "text": "L'équivalence masse-énergie", "isCorrect": true },
+        { "id": "a2", "text": "La vitesse de la lumière", "isCorrect": false, "feedback": "c représente la vitesse de la lumière, mais l'équation décrit autre chose." },
+        { "id": "a3", "text": "La force gravitationnelle", "isCorrect": false, "feedback": "La gravitation est décrite par d'autres équations d'Einstein (relativité générale)." },
+        { "id": "a4", "text": "La masse d'un photon", "isCorrect": false, "feedback": "Les photons n'ont pas de masse au repos." }
+      ],
+      "explanation": "E=mc² établit que masse et énergie sont deux formes de la même chose. Une petite quantité de masse peut se convertir en une énorme quantité d'énergie (c² est gigantesque).",
+      "anecdote": "Cette équation explique pourquoi le Soleil brille : il convertit 4 millions de tonnes de masse en énergie chaque seconde via la fusion nucléaire !",
+      "tags": ["Einstein", "relativité", "énergie", "masse", "physique"],
+      "createdAt": "2024-01-15T11:15:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-art-001",
+      "categoryId": "arts",
+      "subcategoryId": "peinture",
+      "ficheId": "f-impressionnisme",
+      "difficulty": 1,
+      "question": "Quel tableau de Claude Monet a donné son nom au mouvement impressionniste ?",
+      "answers": [
+        { "id": "a1", "text": "Les Nymphéas", "isCorrect": false, "feedback": "Les Nymphéas sont une série tardive de Monet, peinte bien après la naissance du mouvement." },
+        { "id": "a2", "text": "Impression, soleil levant", "isCorrect": true },
+        { "id": "a3", "text": "La Gare Saint-Lazare", "isCorrect": false, "feedback": "Cette série de Monet date de 1877, après la création du terme 'impressionnisme'." },
+        { "id": "a4", "text": "Le Déjeuner sur l'herbe", "isCorrect": false, "feedback": "Cette œuvre est de Manet, pas de Monet, et précède le mouvement." }
+      ],
+      "explanation": "En 1874, le critique Louis Leroy utilisa ironiquement le terme 'impressionnistes' en voyant ce tableau de Monet. Les artistes adoptèrent ce nom initialement moqueur.",
+      "anecdote": "Le tableau représente le port du Havre au lever du soleil. Volé en 1985, il fut retrouvé en 1990 et est aujourd'hui au musée Marmottan à Paris.",
+      "tags": ["Monet", "impressionnisme", "peinture", "1874"],
+      "createdAt": "2024-01-15T11:20:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-art-002",
+      "categoryId": "arts",
+      "subcategoryId": "musique",
+      "ficheId": "f-beethoven",
+      "difficulty": 2,
+      "question": "Combien de symphonies Ludwig van Beethoven a-t-il composées ?",
+      "answers": [
+        { "id": "a1", "text": "7", "isCorrect": false },
+        { "id": "a2", "text": "9", "isCorrect": true },
+        { "id": "a3", "text": "12", "isCorrect": false },
+        { "id": "a4", "text": "41", "isCorrect": false, "feedback": "C'est le nombre de symphonies de Mozart !" }
+      ],
+      "explanation": "Beethoven a composé 9 symphonies entre 1800 et 1824. La Neuvième, avec son célèbre 'Hymne à la joie', est devenue l'hymne européen.",
+      "anecdote": "On parle de la 'malédiction de la neuvième' : plusieurs compositeurs (Schubert, Bruckner, Dvořák, Mahler) sont morts après avoir écrit leur 9e symphonie !",
+      "tags": ["Beethoven", "symphonie", "musique classique", "9"],
+      "createdAt": "2024-01-15T11:25:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-vin-001",
+      "categoryId": "oenologie",
+      "subcategoryId": "regions",
+      "ficheId": "f-bourgogne",
+      "difficulty": 1,
+      "question": "Quel cépage rouge est le roi de la Bourgogne ?",
+      "answers": [
+        { "id": "a1", "text": "Merlot", "isCorrect": false, "feedback": "Le Merlot domine à Bordeaux, notamment à Saint-Émilion et Pomerol." },
+        { "id": "a2", "text": "Pinot Noir", "isCorrect": true },
+        { "id": "a3", "text": "Syrah", "isCorrect": false, "feedback": "La Syrah règne en vallée du Rhône Nord (Côte-Rôtie, Hermitage)." },
+        { "id": "a4", "text": "Cabernet Sauvignon", "isCorrect": false, "feedback": "Le Cabernet Sauvignon domine dans le Médoc bordelais." }
+      ],
+      "explanation": "Le Pinot Noir est le seul cépage rouge autorisé pour les grands crus de Bourgogne. Ce cépage délicat exprime merveilleusement les différents terroirs bourguignons.",
+      "anecdote": "Le Pinot Noir est si sensible qu'on le surnomme le 'cépage casse-pieds'. Il mûrit difficilement et est très sujet aux maladies, mais donne des vins d'une élégance incomparable.",
+      "tags": ["Pinot Noir", "Bourgogne", "cépage", "vin rouge"],
+      "createdAt": "2024-01-15T11:30:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-vin-002",
+      "categoryId": "oenologie",
+      "subcategoryId": "cepages",
+      "ficheId": "f-cepages-blancs",
+      "difficulty": 2,
+      "question": "Quel cépage blanc est utilisé pour le Champagne, le Chablis et le Meursault ?",
+      "answers": [
+        { "id": "a1", "text": "Sauvignon Blanc", "isCorrect": false, "feedback": "Le Sauvignon domine en Loire (Sancerre) et à Bordeaux." },
+        { "id": "a2", "text": "Chardonnay", "isCorrect": true },
+        { "id": "a3", "text": "Riesling", "isCorrect": false, "feedback": "Le Riesling est le cépage noble d'Alsace et d'Allemagne." },
+        { "id": "a4", "text": "Gewurztraminer", "isCorrect": false, "feedback": "Le Gewurztraminer est principalement cultivé en Alsace." }
+      ],
+      "explanation": "Le Chardonnay est le cépage blanc le plus planté au monde. En Champagne, il donne les 'Blanc de Blancs'. En Bourgogne, il s'exprime différemment selon les terroirs.",
+      "anecdote": "Pendant longtemps, on a cru que le Chardonnay et le Pinot Blanc étaient le même cépage. Ce n'est qu'en 1872 que l'ampélographe Victor Pulliat les a distingués.",
+      "tags": ["Chardonnay", "Champagne", "Bourgogne", "cépage blanc"],
+      "createdAt": "2024-01-15T11:35:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-vin-003",
+      "categoryId": "oenologie",
+      "subcategoryId": "degustation",
+      "ficheId": "f-degustation",
+      "difficulty": 3,
+      "question": "À quelle température idéale sert-on généralement un grand Bourgogne rouge ?",
+      "answers": [
+        { "id": "a1", "text": "8-10°C", "isCorrect": false, "feedback": "Cette température convient aux vins blancs secs et aux rosés." },
+        { "id": "a2", "text": "12-14°C", "isCorrect": false, "feedback": "Cette température convient aux vins rouges légers comme le Beaujolais." },
+        { "id": "a3", "text": "16-17°C", "isCorrect": true },
+        { "id": "a4", "text": "18-20°C", "isCorrect": false, "feedback": "Trop chaud ! L'alcool serait trop présent et le vin perdrait en fraîcheur." }
+      ],
+      "explanation": "Les grands Pinot Noir de Bourgogne se servent autour de 16-17°C. L'expression 'chambré' (température de la pièce) date d'une époque où les maisons étaient plus fraîches !",
+      "anecdote": "L'erreur la plus fréquente est de servir le vin rouge trop chaud. Un vin à 20°C semble lourd et alcooleux. Dans le doute, mieux vaut le rafraîchir légèrement.",
+      "tags": ["température", "service", "Bourgogne", "dégustation"],
+      "createdAt": "2024-01-15T11:40:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-pol-001",
+      "categoryId": "politique",
+      "subcategoryId": "institutions",
+      "ficheId": "f-ve-republique",
+      "difficulty": 1,
+      "question": "Quelle est la durée du mandat présidentiel en France depuis 2002 ?",
+      "answers": [
+        { "id": "a1", "text": "4 ans", "isCorrect": false, "feedback": "C'est la durée du mandat présidentiel aux États-Unis." },
+        { "id": "a2", "text": "5 ans", "isCorrect": true },
+        { "id": "a3", "text": "6 ans", "isCorrect": false, "feedback": "C'est la durée du mandat sénatorial en France." },
+        { "id": "a4", "text": "7 ans", "isCorrect": false, "feedback": "C'était la durée du mandat présidentiel avant la réforme de 2000." }
+      ],
+      "explanation": "Le quinquennat a été instauré par référendum en 2000 et appliqué à partir de 2002. Il a remplacé le septennat en vigueur depuis 1873.",
+      "anecdote": "Jacques Chirac a été le dernier président élu pour 7 ans (1995) et le premier élu pour 5 ans (2002). Il a donc connu les deux systèmes !",
+      "tags": ["quinquennat", "Ve République", "président", "France"],
+      "createdAt": "2024-01-15T11:45:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-pol-002",
+      "categoryId": "politique",
+      "subcategoryId": "geopolitique",
+      "ficheId": "f-union-europeenne",
+      "difficulty": 2,
+      "question": "Combien d'États membres compte l'Union européenne en 2024 ?",
+      "answers": [
+        { "id": "a1", "text": "25", "isCorrect": false },
+        { "id": "a2", "text": "27", "isCorrect": true },
+        { "id": "a3", "text": "28", "isCorrect": false, "feedback": "L'UE comptait 28 membres avant le Brexit (sortie du Royaume-Uni en 2020)." },
+        { "id": "a4", "text": "30", "isCorrect": false }
+      ],
+      "explanation": "Depuis le Brexit en 2020, l'UE compte 27 États membres. Le dernier pays à avoir rejoint l'Union est la Croatie en 2013.",
+      "anecdote": "La Suisse, bien qu'au cœur géographique de l'Europe, n'est pas membre de l'UE. Elle a rejeté l'adhésion par référendum en 1992 et n'a jamais relancé le processus.",
+      "tags": ["Union européenne", "États membres", "Brexit", "Europe"],
+      "createdAt": "2024-01-15T11:50:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-art-003",
+      "categoryId": "arts",
+      "subcategoryId": "litterature",
+      "ficheId": "f-prix-nobel-litterature",
+      "difficulty": 2,
+      "question": "Quel écrivain français a reçu le Prix Nobel de littérature en 1957 ?",
+      "answers": [
+        { "id": "a1", "text": "Jean-Paul Sartre", "isCorrect": false, "feedback": "Sartre a reçu le Nobel en 1964 mais l'a refusé !" },
+        { "id": "a2", "text": "Albert Camus", "isCorrect": true },
+        { "id": "a3", "text": "André Gide", "isCorrect": false, "feedback": "André Gide a reçu le Nobel en 1947." },
+        { "id": "a4", "text": "François Mauriac", "isCorrect": false, "feedback": "Mauriac a reçu le Nobel en 1952." }
+      ],
+      "explanation": "Camus a reçu le Nobel à 44 ans, devenant le plus jeune Français lauréat. Il fut récompensé pour 'L'Étranger', 'La Peste' et son œuvre philosophique sur l'absurde.",
+      "anecdote": "Camus a appris qu'il avait le Nobel par un journaliste, rue Soufflot à Paris. Sa première réaction : 'Malraux le méritait bien plus que moi.'",
+      "tags": ["Camus", "Nobel", "littérature", "1957"],
+      "createdAt": "2024-01-15T11:55:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-sci-003",
+      "categoryId": "sciences",
+      "subcategoryId": "biologie",
+      "ficheId": "f-adn",
+      "difficulty": 2,
+      "question": "Qui a découvert la structure en double hélice de l'ADN ?",
+      "answers": [
+        { "id": "a1", "text": "Charles Darwin", "isCorrect": false, "feedback": "Darwin a développé la théorie de l'évolution, pas la structure de l'ADN." },
+        { "id": "a2", "text": "Watson et Crick", "isCorrect": true },
+        { "id": "a3", "text": "Louis Pasteur", "isCorrect": false, "feedback": "Pasteur a travaillé sur les microbes et la vaccination." },
+        { "id": "a4", "text": "Gregor Mendel", "isCorrect": false, "feedback": "Mendel est le père de la génétique mais n'a pas travaillé sur l'ADN." }
+      ],
+      "explanation": "James Watson et Francis Crick ont publié la structure de l'ADN en 1953 dans la revue Nature. Cette découverte leur a valu le Nobel en 1962.",
+      "anecdote": "Leur découverte reposait en grande partie sur les travaux de Rosalind Franklin, dont les clichés de diffraction aux rayons X furent essentiels. Elle mourut avant le Nobel et ne fut pas créditée à l'époque.",
+      "tags": ["ADN", "Watson", "Crick", "double hélice", "génétique"],
+      "createdAt": "2024-01-15T12:00:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-geo-003",
+      "categoryId": "geographie",
+      "subcategoryId": "asie",
+      "ficheId": "f-himalaya",
+      "difficulty": 1,
+      "question": "Quel est le plus haut sommet du monde ?",
+      "answers": [
+        { "id": "a1", "text": "K2", "isCorrect": false, "feedback": "Le K2 (8 611 m) est le deuxième plus haut sommet." },
+        { "id": "a2", "text": "Mont Everest", "isCorrect": true },
+        { "id": "a3", "text": "Kangchenjunga", "isCorrect": false, "feedback": "Le Kangchenjunga (8 586 m) est le troisième plus haut sommet." },
+        { "id": "a4", "text": "Mont Blanc", "isCorrect": false, "feedback": "Le Mont Blanc (4 808 m) est le plus haut d'Europe occidentale, mais très loin des sommets himalayens." }
+      ],
+      "explanation": "L'Everest culmine à 8 849 mètres. Il se trouve à la frontière entre le Népal (où il s'appelle Sagarmatha) et le Tibet chinois (Chomolungma).",
+      "anecdote": "L'Everest grandit de 4 mm par an ! La collision des plaques tectoniques indienne et eurasienne continue de pousser l'Himalaya vers le haut.",
+      "tags": ["Everest", "Himalaya", "sommet", "montagne"],
+      "createdAt": "2024-01-15T12:05:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-hist-005",
+      "categoryId": "histoire",
+      "subcategoryId": "contemporain",
+      "ficheId": "f-guerre-froide",
+      "difficulty": 2,
+      "question": "En quelle année le mur de Berlin est-il tombé ?",
+      "answers": [
+        { "id": "a1", "text": "1987", "isCorrect": false },
+        { "id": "a2", "text": "1989", "isCorrect": true },
+        { "id": "a3", "text": "1991", "isCorrect": false, "feedback": "1991 est l'année de la dissolution de l'URSS." },
+        { "id": "a4", "text": "1990", "isCorrect": false, "feedback": "1990 est l'année de la réunification allemande, mais le mur est tombé en 1989." }
+      ],
+      "explanation": "Le mur de Berlin est tombé dans la nuit du 9 au 10 novembre 1989. Cet événement symbolise la fin de la Guerre froide et la réunification de l'Allemagne.",
+      "anecdote": "La chute du mur résulte d'une erreur de communication ! Le porte-parole est-allemand a annoncé par mégarde l'ouverture 'immédiate' des frontières lors d'une conférence de presse.",
+      "tags": ["mur de Berlin", "1989", "Guerre froide", "Allemagne"],
+      "createdAt": "2024-01-15T12:10:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    },
+    {
+      "id": "q-sci-004",
+      "categoryId": "sciences",
+      "subcategoryId": "medecine",
+      "ficheId": "f-vaccination",
+      "difficulty": 2,
+      "question": "Qui a mis au point le premier vaccin ?",
+      "answers": [
+        { "id": "a1", "text": "Louis Pasteur", "isCorrect": false, "feedback": "Pasteur a développé le vaccin contre la rage en 1885, mais ce n'était pas le premier vaccin." },
+        { "id": "a2", "text": "Edward Jenner", "isCorrect": true },
+        { "id": "a3", "text": "Robert Koch", "isCorrect": false, "feedback": "Koch a identifié les bactéries responsables de la tuberculose et du choléra." },
+        { "id": "a4", "text": "Alexander Fleming", "isCorrect": false, "feedback": "Fleming a découvert la pénicilline, un antibiotique, pas un vaccin." }
+      ],
+      "explanation": "Edward Jenner a mis au point le premier vaccin en 1796 contre la variole, en utilisant le virus de la vaccine (maladie des vaches). Le mot 'vaccin' vient d'ailleurs de 'vacca' (vache).",
+      "anecdote": "Jenner a inoculé la vaccine au petit James Phipps, 8 ans, puis l'a exposé à la variole. L'enfant n'est pas tombé malade. Aujourd'hui, cette expérience serait éthiquement impensable !",
+      "tags": ["Jenner", "vaccin", "variole", "médecine"],
+      "createdAt": "2024-01-15T12:15:00Z",
+      "timesAnswered": 0,
+      "timesCorrect": 0
+    }
+  ]
+}

@@ -1,0 +1,518 @@
+{
+  "fiches": [
+    {
+      "id": "f-rome-republique",
+      "categoryId": "histoire",
+      "subcategoryId": "antiquite",
+      "title": "La République Romaine",
+      "subtitle": "509 - 27 av. J.-C. : Cinq siècles qui ont façonné l'Occident",
+      "difficulty": 2,
+      "estimatedTime": 20,
+      "objectives": [
+        "Comprendre le fonctionnement des institutions républicaines",
+        "Identifier les causes de l'effondrement de la République",
+        "Situer les événements et personnages clés sur une frise chronologique"
+      ],
+      "sections": [
+        {
+          "id": "sec-001",
+          "type": "text",
+          "title": "Introduction",
+          "content": {
+            "paragraphs": [
+              "Imaginez une cité qui, en quelques siècles, passe d'une bourgade de bergers à la maîtresse du monde méditerranéen. C'est l'histoire extraordinaire de Rome républicaine.",
+              "La République romaine n'est pas née d'une révolution idéaliste, mais d'un coup d'État aristocratique. En 509 av. J.-C., les nobles romains renversent le dernier roi étrusque, Tarquin le Superbe, et jurent de ne plus jamais accepter de roi. Ce serment façonnera l'identité romaine pour les cinq siècles suivants."
+            ]
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 0,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-002",
+          "type": "timeline",
+          "title": "Chronologie essentielle",
+          "content": {
+            "events": [
+              { "date": "509 av. J.-C.", "event": "Fondation de la République", "importance": "major", "details": "Chute de Tarquin le Superbe" },
+              { "date": "450 av. J.-C.", "event": "Loi des XII Tables", "importance": "major", "details": "Premier code de lois écrites" },
+              { "date": "390 av. J.-C.", "event": "Sac de Rome par les Gaulois", "importance": "minor", "details": "Traumatisme fondateur" },
+              { "date": "264-146 av. J.-C.", "event": "Guerres puniques", "importance": "major", "details": "Rome contre Carthage" },
+              { "date": "133 av. J.-C.", "event": "Réformes des Gracques", "importance": "major", "details": "Début des guerres civiles" },
+              { "date": "49 av. J.-C.", "event": "César franchit le Rubicon", "importance": "major", "details": "Guerre civile finale" },
+              { "date": "44 av. J.-C.", "event": "Assassinat de César", "importance": "major", "details": "Ides de mars" },
+              { "date": "27 av. J.-C.", "event": "Avènement d'Auguste", "importance": "major", "details": "Fin de la République" }
+            ]
+          },
+          "animation": {
+            "type": "slideIn",
+            "delay": 100,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-003",
+          "type": "interactive",
+          "title": "Les institutions républicaines",
+          "content": {
+            "interactiveType": "diagram",
+            "description": "Le système politique romain reposait sur un équilibre subtil entre trois forces : le Sénat (conseil des anciens), les magistrats (pouvoir exécutif) et les assemblées populaires (souveraineté du peuple).",
+            "elements": [
+              {
+                "id": "senat",
+                "label": "SÉNAT",
+                "icon": "🏛️",
+                "position": { "x": 50, "y": 15 },
+                "color": "#8B0000",
+                "description": "300 à 600 membres (anciens magistrats). Contrôle la politique étrangère, les finances et conseille les magistrats. Autorité morale considérable mais pas de pouvoir législatif direct.",
+                "funFact": "Les débats commençaient toujours par l'avis du princeps senatus (premier sénateur). Être appelé en dernier était humiliant !"
+              },
+              {
+                "id": "consuls",
+                "label": "CONSULS (×2)",
+                "icon": "⚔️",
+                "position": { "x": 25, "y": 45 },
+                "color": "#FFD700",
+                "description": "Deux magistrats suprêmes élus pour 1 an. Commandent les armées, convoquent le Sénat et les assemblées. Chacun peut bloquer l'autre (droit de veto).",
+                "funFact": "Pour éviter les conflits, les consuls alternaient la préséance chaque mois. Le mot 'collègue' vient de cette collégialité !"
+              },
+              {
+                "id": "preteurs",
+                "label": "PRÉTEURS",
+                "icon": "⚖️",
+                "position": { "x": 75, "y": 45 },
+                "color": "#4169E1",
+                "description": "Magistrats chargés de la justice. Le préteur urbain juge les citoyens, le préteur pérégrin les étrangers. Peuvent aussi commander des armées.",
+                "funFact": "Le préteur publiait son 'édit' en début de mandat, annonçant comment il jugerait. C'est l'ancêtre de notre jurisprudence !"
+              },
+              {
+                "id": "tribuns",
+                "label": "TRIBUNS DE LA PLÈBE",
+                "icon": "🛡️",
+                "position": { "x": 25, "y": 75 },
+                "color": "#228B22",
+                "description": "10 tribuns élus par la plèbe. Leur personne est sacrée (sacrosancti). Peuvent bloquer toute décision par leur veto et proposer des lois.",
+                "funFact": "Les tribuns ne pouvaient pas quitter Rome pendant leur mandat. Leur porte devait rester ouverte jour et nuit pour recevoir les plaintes !"
+              },
+              {
+                "id": "assemblees",
+                "label": "ASSEMBLÉES DU PEUPLE",
+                "icon": "👥",
+                "position": { "x": 75, "y": 75 },
+                "color": "#9932CC",
+                "description": "Comices centuriates (militaires, élisent consuls et préteurs), comices tributes (civils, votent les lois), concile de la plèbe (plébéiens uniquement).",
+                "funFact": "Les votes se faisaient par groupes, pas individuellement. Un riche citoyen avait plus de poids qu'un pauvre : Rome n'était pas une démocratie au sens moderne !"
+              }
+            ],
+            "connections": [
+              { "from": "senat", "to": "consuls", "label": "conseille" },
+              { "from": "assemblees", "to": "consuls", "label": "élit" },
+              { "from": "assemblees", "to": "preteurs", "label": "élit" },
+              { "from": "tribuns", "to": "senat", "label": "peut bloquer" },
+              { "from": "consuls", "to": "senat", "label": "convoque" }
+            ]
+          },
+          "animation": {
+            "type": "scale",
+            "delay": 200,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-004",
+          "type": "comparison",
+          "title": "Patriciens vs Plébéiens",
+          "content": {
+            "description": "La société romaine était divisée en deux ordres aux droits inégaux. Le 'conflit des ordres' (494-287 av. J.-C.) permit progressivement aux plébéiens d'accéder aux magistratures.",
+            "items": [
+              {
+                "name": "Patriciens",
+                "icon": "👑",
+                "color": "#8B0000",
+                "characteristics": [
+                  "Descendants des familles fondatrices",
+                  "Monopole initial des magistratures",
+                  "Accès aux auspices (consultation des dieux)",
+                  "Environ 50 familles (gentes)",
+                  "Exemples : Julii, Cornelii, Claudii"
+                ]
+              },
+              {
+                "name": "Plébéiens",
+                "icon": "🔨",
+                "color": "#4169E1",
+                "characteristics": [
+                  "Tous les autres citoyens",
+                  "De l'artisan riche au paysan pauvre",
+                  "Exclus des magistratures jusqu'en 367 av. J.-C.",
+                  "Créent leurs propres institutions (tribuns)",
+                  "Exemples célèbres : Marius, Cicéron"
+                ]
+              }
+            ]
+          },
+          "animation": {
+            "type": "slideIn",
+            "delay": 100,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-005",
+          "type": "quote",
+          "title": "Parole de Romain",
+          "content": {
+            "quote": "Carthago delenda est.",
+            "translation": "Il faut détruire Carthage.",
+            "author": "Caton l'Ancien",
+            "context": "Caton terminait tous ses discours au Sénat par cette phrase, quel que soit le sujet. Cette obsession reflète la peur viscérale que Rome avait de sa rivale punique.",
+            "significance": "Cette phrase illustre la détermination implacable de Rome et sa capacité à mobiliser toutes ses ressources pour éliminer une menace."
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 300,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-006",
+          "type": "interactive",
+          "title": "Les causes de la chute",
+          "content": {
+            "interactiveType": "cards",
+            "description": "La République ne s'est pas effondrée d'un coup. Plusieurs facteurs se sont combinés sur plus d'un siècle.",
+            "elements": [
+              {
+                "id": "card-1",
+                "label": "Crise agraire",
+                "icon": "🌾",
+                "description": "Les conquêtes enrichissent les nobles qui rachètent les terres des paysans-soldats. Ces derniers affluent vers Rome, formant une plèbe urbaine déracinée et manipulable.",
+                "consequence": "Armées professionnelles loyales à leur général, pas à Rome"
+              },
+              {
+                "id": "card-2",
+                "label": "Généraux ambitieux",
+                "icon": "⚔️",
+                "description": "Marius, Sylla, Pompée, César : les grands généraux utilisent leurs légions pour imposer leur volonté politique. Les guerres civiles deviennent récurrentes.",
+                "consequence": "Le pouvoir personnel remplace les institutions"
+              },
+              {
+                "id": "card-3",
+                "label": "Violence politique",
+                "icon": "🔥",
+                "description": "L'assassinat des Gracques (133-121 av. J.-C.) inaugure un siècle de violences. Le meurtre politique devient banal.",
+                "consequence": "Les lois ne protègent plus personne"
+              },
+              {
+                "id": "card-4",
+                "label": "Corruption massive",
+                "icon": "💰",
+                "description": "Les richesses des conquêtes corrompent la classe politique. Les élections s'achètent, les procès se négocient.",
+                "consequence": "Perte de légitimité des institutions"
+              }
+            ]
+          },
+          "animation": {
+            "type": "reveal",
+            "delay": 100,
+            "trigger": "onClick"
+          }
+        },
+        {
+          "id": "sec-007",
+          "type": "text",
+          "title": "L'héritage républicain",
+          "content": {
+            "paragraphs": [
+              "Bien que la République ait échoué politiquement, son héritage est immense. Le droit romain, la notion de citoyenneté, l'idée d'équilibre des pouvoirs, le système des contre-pouvoirs : tout cela vient de Rome.",
+              "Les Pères fondateurs américains ont explicitement pris Rome comme modèle. Le Sénat américain, le titre de 'consul' proposé pour Washington, les fasces sur les pièces de dix cents : les références sont omniprésentes.",
+              "Même le mot 'République' (res publica, 'la chose publique') nous vient de Rome. Comprendre la République romaine, c'est comprendre une part de notre ADN politique."
+            ]
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 200,
+            "trigger": "onView"
+          }
+        }
+      ],
+      "keyPoints": [
+        "La République naît en 509 av. J.-C. du refus de la monarchie",
+        "Le système repose sur la collégialité et l'annualité des magistratures",
+        "Le Sénat conseille mais ne légifère pas directement",
+        "Le conflit des ordres permet l'intégration progressive des plébéiens",
+        "La République s'effondre sous le poids des guerres civiles (133-27 av. J.-C.)"
+      ],
+      "mnemonics": [
+        {
+          "type": "acronym",
+          "content": "SPQR",
+          "explanation": "Senatus PopulusQue Romanus - Le Sénat et le Peuple Romain. Cette devise résume l'équilibre républicain entre l'élite (Sénat) et le peuple (assemblées)."
+        },
+        {
+          "type": "phrase",
+          "content": "César Franchit le Rubicon en Quarante-Neuf",
+          "explanation": "Moyen mnémotechnique pour retenir la date : 49 av. J.-C."
+        },
+        {
+          "type": "association",
+          "content": "Tribun = Tribune = Celui qui parle pour le peuple",
+          "explanation": "Le mot 'tribune' (lieu d'où on parle) vient des tribuns de la plèbe qui défendaient le peuple."
+        },
+        {
+          "type": "visual",
+          "content": "2 consuls = 2 yeux qui se surveillent mutuellement",
+          "explanation": "La collégialité empêchait qu'un seul homme concentre le pouvoir."
+        }
+      ],
+      "relatedTopics": [
+        "L'Empire romain",
+        "Jules César",
+        "La démocratie athénienne",
+        "Carthage et les guerres puniques"
+      ],
+      "quiz": ["q-hist-001", "q-hist-002"],
+      "createdAt": "2024-01-15T10:00:00Z",
+      "lastStudied": null,
+      "masteryLevel": 0
+    },
+    {
+      "id": "f-bourgogne",
+      "categoryId": "oenologie",
+      "subcategoryId": "regions",
+      "title": "Les Vins de Bourgogne",
+      "subtitle": "Le royaume du Pinot Noir et du Chardonnay",
+      "difficulty": 2,
+      "estimatedTime": 18,
+      "objectives": [
+        "Connaître la hiérarchie des appellations bourguignonnes",
+        "Identifier les principales caractéristiques des grands terroirs",
+        "Comprendre pourquoi la Bourgogne produit des vins si singuliers"
+      ],
+      "sections": [
+        {
+          "id": "sec-001",
+          "type": "text",
+          "title": "Introduction",
+          "content": {
+            "paragraphs": [
+              "La Bourgogne est un paradoxe viticole : une région minuscule (28 000 hectares, soit 3% du vignoble français) qui produit les vins les plus mythiques et les plus chers du monde.",
+              "Ici, pas de grands domaines ni de mélanges de cépages. Un seul cépage rouge (le Pinot Noir), un seul cépage blanc (le Chardonnay), et une obsession : le terroir. Chaque parcelle, parfois de quelques ares seulement, a son nom et son caractère."
+            ]
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 0,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-002",
+          "type": "interactive",
+          "title": "La hiérarchie des appellations",
+          "content": {
+            "interactiveType": "pyramid",
+            "description": "La Bourgogne a une classification pyramidale unique, basée sur la qualité des terroirs. Plus on monte, plus le terroir est exceptionnel.",
+            "elements": [
+              {
+                "id": "level-1",
+                "label": "GRANDS CRUS",
+                "percentage": "1-2%",
+                "icon": "👑",
+                "color": "#8B0000",
+                "description": "33 climats d'exception. Pas besoin de mentionner le village : le nom du climat suffit (Romanée-Conti, Chambertin, Montrachet...).",
+                "examples": ["Romanée-Conti", "Chambertin", "Montrachet", "Clos de Vougeot"]
+              },
+              {
+                "id": "level-2",
+                "label": "PREMIERS CRUS",
+                "percentage": "10-12%",
+                "icon": "🥇",
+                "color": "#FFD700",
+                "description": "562 climats classés. Le nom du village précède celui du climat : Gevrey-Chambertin 1er Cru Les Cazetiers.",
+                "examples": ["Nuits-Saint-Georges 1er Cru Les Vaucrains", "Meursault 1er Cru Les Perrières"]
+              },
+              {
+                "id": "level-3",
+                "label": "APPELLATIONS VILLAGES",
+                "percentage": "35%",
+                "icon": "🏘️",
+                "color": "#228B22",
+                "description": "44 appellations communales. Le vin porte le nom du village : Pommard, Volnay, Puligny-Montrachet...",
+                "examples": ["Gevrey-Chambertin", "Pommard", "Meursault", "Chablis"]
+              },
+              {
+                "id": "level-4",
+                "label": "APPELLATIONS RÉGIONALES",
+                "percentage": "52%",
+                "icon": "🍇",
+                "color": "#4169E1",
+                "description": "Appellations génériques couvrant l'ensemble de la région : Bourgogne, Bourgogne Aligoté, Crémant de Bourgogne...",
+                "examples": ["Bourgogne Rouge", "Bourgogne Blanc", "Côtes de Nuits-Villages"]
+              }
+            ]
+          },
+          "animation": {
+            "type": "scale",
+            "delay": 100,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-003",
+          "type": "comparison",
+          "title": "Côte de Nuits vs Côte de Beaune",
+          "content": {
+            "description": "La Côte d'Or se divise en deux parties aux caractères distincts.",
+            "items": [
+              {
+                "name": "Côte de Nuits",
+                "icon": "🍷",
+                "color": "#8B0000",
+                "characteristics": [
+                  "Au nord, de Dijon à Corgoloin",
+                  "Royaume du Pinot Noir",
+                  "Vins rouges puissants et structurés",
+                  "24 des 33 Grands Crus rouges",
+                  "Villages : Gevrey, Chambolle, Vosne-Romanée, Nuits"
+                ]
+              },
+              {
+                "name": "Côte de Beaune",
+                "icon": "🥂",
+                "color": "#FFD700",
+                "characteristics": [
+                  "Au sud, de Ladoix à Santenay",
+                  "Excellence du Chardonnay",
+                  "Rouges plus souples et fruités",
+                  "Tous les Grands Crus blancs",
+                  "Villages : Pommard, Volnay, Meursault, Puligny"
+                ]
+              }
+            ]
+          },
+          "animation": {
+            "type": "slideIn",
+            "delay": 100,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-004",
+          "type": "quote",
+          "title": "Parole d'expert",
+          "content": {
+            "quote": "En Bourgogne, quand on parle de terroir, on parle de climat. Pas du temps qu'il fait, mais d'un lieu-dit, d'une parcelle unique qui donne un vin unique.",
+            "author": "Aubert de Villaine",
+            "context": "Co-gérant du Domaine de la Romanée-Conti, le domaine le plus prestigieux de Bourgogne.",
+            "significance": "Le mot 'climat' en Bourgogne désigne une parcelle délimitée depuis des siècles. Les climats de Bourgogne sont classés au patrimoine mondial de l'UNESCO depuis 2015."
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 200,
+            "trigger": "onView"
+          }
+        },
+        {
+          "id": "sec-005",
+          "type": "interactive",
+          "title": "Les cépages bourguignons",
+          "content": {
+            "interactiveType": "cards",
+            "elements": [
+              {
+                "id": "pinot",
+                "label": "Pinot Noir",
+                "icon": "🍇",
+                "color": "#8B0000",
+                "description": "Cépage rouge capricieux mais sublime. Donne des vins d'une finesse incomparable, aux arômes de fruits rouges (cerise, framboise) évoluant vers des notes de sous-bois avec l'âge.",
+                "characteristics": ["Peau fine, sensible aux maladies", "Précoce, craint les gelées", "Faible en tanins, haute acidité", "Exprime parfaitement le terroir"]
+              },
+              {
+                "id": "chardonnay",
+                "label": "Chardonnay",
+                "icon": "🍏",
+                "color": "#FFD700",
+                "description": "Cépage blanc le plus planté au monde. En Bourgogne, il donne des vins d'une grande complexité, du Chablis minéral au Meursault opulent.",
+                "characteristics": ["Très adaptable", "Arômes de fruits blancs, agrumes", "Se marie bien avec le bois", "Grande capacité de garde"]
+              },
+              {
+                "id": "aligote",
+                "label": "Aligoté",
+                "icon": "🍋",
+                "color": "#9ACD32",
+                "description": "Cépage blanc secondaire, vif et acidulé. Traditionnellement utilisé pour le kir (avec la crème de cassis). Connaît un regain d'intérêt.",
+                "characteristics": ["Très acide", "Notes d'agrumes", "À boire jeune", "Appellation Bourgogne Aligoté"]
+              },
+              {
+                "id": "gamay",
+                "label": "Gamay",
+                "icon": "🫐",
+                "color": "#DC143C",
+                "description": "Interdit en Bourgogne depuis 1395 (!) mais autorisé pour le Bourgogne Passe-Tout-Grains (assemblage avec le Pinot Noir). Règne en maître dans le Beaujolais voisin.",
+                "characteristics": ["Fruité et gourmand", "Faible en tanins", "À boire frais", "Ancêtre du Pinot Noir"]
+              }
+            ]
+          },
+          "animation": {
+            "type": "reveal",
+            "delay": 100,
+            "trigger": "onClick"
+          }
+        },
+        {
+          "id": "sec-006",
+          "type": "text",
+          "title": "À retenir",
+          "content": {
+            "paragraphs": [
+              "La Bourgogne, c'est la quintessence du terroir : un sol, un cépage, un climat. Aucune région au monde ne pousse aussi loin cette logique parcellaire.",
+              "La classification bourguignonne, établie sur des siècles d'observation, reste une référence mondiale. Elle prouve qu'au-delà du cépage et du vigneron, c'est la terre qui fait le grand vin."
+            ]
+          },
+          "animation": {
+            "type": "fadeIn",
+            "delay": 100,
+            "trigger": "onView"
+          }
+        }
+      ],
+      "keyPoints": [
+        "Deux cépages dominent : Pinot Noir (rouge) et Chardonnay (blanc)",
+        "Hiérarchie pyramidale : Régionale → Village → 1er Cru → Grand Cru",
+        "33 Grands Crus, dont 32 sur la Côte d'Or",
+        "Le 'climat' est une parcelle, pas la météo !",
+        "Côte de Nuits = grands rouges / Côte de Beaune = grands blancs"
+      ],
+      "mnemonics": [
+        {
+          "type": "phrase",
+          "content": "Gevrey-Chambertin commence le voyage au Nord, Santenay le termine au Sud",
+          "explanation": "Pour retenir l'orientation Nord-Sud de la Côte d'Or."
+        },
+        {
+          "type": "acronym",
+          "content": "PC = Pinot Chardonnay",
+          "explanation": "Les deux seuls cépages nobles de Bourgogne. Comme un PC, c'est simple et efficace !"
+        },
+        {
+          "type": "association",
+          "content": "Nuits = Nuit = Rouge sombre / Beaune = Beaux = Blancs lumineux",
+          "explanation": "Côte de Nuits pour les rouges, Côte de Beaune excelle en blancs."
+        }
+      ],
+      "relatedTopics": [
+        "Les cépages français",
+        "La dégustation du vin",
+        "Les accords mets-vins",
+        "Les autres régions viticoles françaises"
+      ],
+      "quiz": ["q-vin-001", "q-vin-002", "q-vin-003"],
+      "createdAt": "2024-01-15T14:00:00Z",
+      "lastStudied": null,
+      "masteryLevel": 0
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "categories": [
+    {
+      "id": "histoire",
+      "name": "Histoire",
+      "icon": "🏛️",
+      "color": "#8B4513",
+      "description": "De l'Antiquité à nos jours",
+      "subcategories": [
+        { "id": "antiquite", "name": "Antiquité", "icon": "🏺" },
+        { "id": "moyen-age", "name": "Moyen Âge", "icon": "🏰" },
+        { "id": "renaissance", "name": "Renaissance", "icon": "🎨" },
+        { "id": "moderne", "name": "Époque moderne", "icon": "⚓" },
+        { "id": "contemporain", "name": "Époque contemporaine", "icon": "🏭" }
+      ]
+    },
+    {
+      "id": "geographie",
+      "name": "Géographie",
+      "icon": "🌍",
+      "color": "#228B22",
+      "description": "Pays, capitales, fleuves et reliefs",
+      "subcategories": [
+        { "id": "europe", "name": "Europe", "icon": "🇪🇺" },
+        { "id": "ameriques", "name": "Amériques", "icon": "🗽" },
+        { "id": "asie", "name": "Asie", "icon": "🗻" },
+        { "id": "afrique", "name": "Afrique", "icon": "🦁" },
+        { "id": "oceanie", "name": "Océanie", "icon": "🏝️" },
+        { "id": "physique", "name": "Géographie physique", "icon": "🌋" }
+      ]
+    },
+    {
+      "id": "sciences",
+      "name": "Sciences",
+      "icon": "🔬",
+      "color": "#4169E1",
+      "description": "Physique, chimie, biologie, astronomie",
+      "subcategories": [
+        { "id": "physique", "name": "Physique", "icon": "⚛️" },
+        { "id": "chimie", "name": "Chimie", "icon": "🧪" },
+        { "id": "biologie", "name": "Biologie", "icon": "🧬" },
+        { "id": "astronomie", "name": "Astronomie", "icon": "🔭" },
+        { "id": "medecine", "name": "Médecine", "icon": "⚕️" },
+        { "id": "mathematiques", "name": "Mathématiques", "icon": "📐" }
+      ]
+    },
+    {
+      "id": "arts",
+      "name": "Arts & Culture",
+      "icon": "🎨",
+      "color": "#9932CC",
+      "description": "Peinture, musique, littérature, cinéma",
+      "subcategories": [
+        { "id": "peinture", "name": "Peinture & Sculpture", "icon": "🖼️" },
+        { "id": "musique", "name": "Musique", "icon": "🎵" },
+        { "id": "litterature", "name": "Littérature", "icon": "📚" },
+        { "id": "cinema", "name": "Cinéma", "icon": "🎬" },
+        { "id": "architecture", "name": "Architecture", "icon": "🏛️" },
+        { "id": "philosophie", "name": "Philosophie", "icon": "💭" }
+      ]
+    },
+    {
+      "id": "politique",
+      "name": "Politique & Société",
+      "icon": "⚖️",
+      "color": "#DC143C",
+      "description": "Institutions, économie, géopolitique",
+      "subcategories": [
+        { "id": "institutions", "name": "Institutions françaises", "icon": "🇫🇷" },
+        { "id": "economie", "name": "Économie", "icon": "📈" },
+        { "id": "geopolitique", "name": "Géopolitique", "icon": "🌐" },
+        { "id": "droit", "name": "Droit", "icon": "📜" },
+        { "id": "union-europeenne", "name": "Union européenne", "icon": "🇪🇺" }
+      ]
+    },
+    {
+      "id": "oenologie",
+      "name": "Œnologie",
+      "icon": "🍷",
+      "color": "#722F37",
+      "description": "Régions, cépages, dégustation",
+      "subcategories": [
+        { "id": "regions", "name": "Régions viticoles", "icon": "🗺️" },
+        { "id": "cepages", "name": "Cépages", "icon": "🍇" },
+        { "id": "degustation", "name": "Dégustation", "icon": "👃" },
+        { "id": "accords", "name": "Accords mets-vins", "icon": "🍽️" },
+        { "id": "histoire-vin", "name": "Histoire du vin", "icon": "📜" }
+      ]
+    },
+    {
+      "id": "sport",
+      "name": "Sport",
+      "icon": "⚽",
+      "color": "#FF8C00",
+      "description": "Football, tennis, JO, records",
+      "subcategories": [
+        { "id": "football", "name": "Football", "icon": "⚽" },
+        { "id": "tennis", "name": "Tennis", "icon": "🎾" },
+        { "id": "olympisme", "name": "Jeux Olympiques", "icon": "🏅" },
+        { "id": "cyclisme", "name": "Cyclisme", "icon": "🚴" },
+        { "id": "autres-sports", "name": "Autres sports", "icon": "🏆" }
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature & Environnement",
+      "icon": "🌿",
+      "color": "#2E8B57",
+      "description": "Faune, flore, écologie",
+      "subcategories": [
+        { "id": "faune", "name": "Faune", "icon": "🦊" },
+        { "id": "flore", "name": "Flore", "icon": "🌸" },
+        { "id": "ecologie", "name": "Écologie", "icon": "♻️" },
+        { "id": "oceans", "name": "Océans", "icon": "🐋" },
+        { "id": "climat", "name": "Climat", "icon": "🌡️" }
+      ]
+    }
+  ]
+}
