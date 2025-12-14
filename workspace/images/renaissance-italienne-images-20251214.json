@@ -1,0 +1,135 @@
+{
+  "sujet": "La Renaissance italienne",
+  "dateGeneration": "2024-12-14",
+  "agent": "image-curator",
+  "note": "URLs Wikimedia Commons canoniques - sources stables et libres de droits",
+  "images": [
+    {
+      "id": "joconde",
+      "titre": "La Joconde (Mona Lisa)",
+      "artiste": "Léonard de Vinci",
+      "date": "1503-1519",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Portrait le plus célèbre au monde, exposé au Louvre",
+      "utilisation": "hero, artiste-leonard"
+    },
+    {
+      "id": "david",
+      "titre": "David",
+      "artiste": "Michel-Ange",
+      "date": "1501-1504",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU002.jpg/800px-%27David%27_by_Michelangelo_Fir_JBU002.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "CC BY-SA 3.0",
+      "description": "Sculpture monumentale en marbre de 5,17 mètres, Galerie de l'Académie, Florence",
+      "utilisation": "artiste-michelange"
+    },
+    {
+      "id": "creation-adam",
+      "titre": "La Création d'Adam",
+      "artiste": "Michel-Ange",
+      "date": "1508-1512",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/1280px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Fresque emblématique du plafond de la Chapelle Sixtine",
+      "utilisation": "section-sixtine"
+    },
+    {
+      "id": "naissance-venus",
+      "titre": "La Naissance de Vénus",
+      "artiste": "Sandro Botticelli",
+      "date": "1484-1486",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Birth_of_Venus_Botticelli.jpg/1280px-Birth_of_Venus_Botticelli.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Chef-d'œuvre de la Renaissance florentine, Galerie des Offices",
+      "utilisation": "artiste-botticelli"
+    },
+    {
+      "id": "ecole-athenes",
+      "titre": "L'École d'Athènes",
+      "artiste": "Raphaël",
+      "date": "1509-1511",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/1280px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Fresque monumentale représentant les philosophes antiques, Vatican",
+      "utilisation": "artiste-raphael"
+    },
+    {
+      "id": "duomo-florence",
+      "titre": "Cathédrale Santa Maria del Fiore",
+      "artiste": "Filippo Brunelleschi (dôme)",
+      "date": "1420-1436",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Florence_Duomo_from_Michelangelo_hill.jpg/1280px-Florence_Duomo_from_Michelangelo_hill.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "CC BY-SA 3.0",
+      "description": "Le dôme de Brunelleschi, symbole de la Renaissance florentine",
+      "utilisation": "lieu-florence, architecture"
+    },
+    {
+      "id": "leonard-portrait",
+      "titre": "Autoportrait de Léonard de Vinci",
+      "artiste": "Léonard de Vinci",
+      "date": "c. 1512",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Leonardo_self.jpg/800px-Leonardo_self.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Présumé autoportrait de Léonard âgé, sanguine sur papier",
+      "utilisation": "portrait-leonard"
+    },
+    {
+      "id": "laurent-medicis",
+      "titre": "Portrait de Laurent de Médicis",
+      "artiste": "Giorgio Vasari",
+      "date": "XVIe siècle",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Lorenzo_de_Medici.jpg/800px-Lorenzo_de_Medici.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Laurent le Magnifique, plus grand mécène de la Renaissance",
+      "utilisation": "section-medicis"
+    },
+    {
+      "id": "cene",
+      "titre": "La Cène",
+      "artiste": "Léonard de Vinci",
+      "date": "1495-1498",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/1280px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Peinture murale à Santa Maria delle Grazie, Milan",
+      "utilisation": "oeuvre-leonard"
+    },
+    {
+      "id": "homme-vitruve",
+      "titre": "L'Homme de Vitruve",
+      "artiste": "Léonard de Vinci",
+      "date": "c. 1490",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_Vitruve_Luc_Viatour.jpg/800px-Da_Vinci_Vitruve_Luc_Viatour.jpg",
+      "source": "Wikimedia Commons",
+      "licence": "Domaine public",
+      "description": "Étude des proportions humaines idéales selon Vitruve",
+      "utilisation": "concept-humanisme"
+    }
+  ],
+  "imagesParSection": {
+    "hero": ["joconde"],
+    "artistes": {
+      "leonard": ["leonard-portrait", "joconde", "cene", "homme-vitruve"],
+      "michelange": ["david", "creation-adam"],
+      "raphael": ["ecole-athenes"],
+      "botticelli": ["naissance-venus"]
+    },
+    "lieux": {
+      "florence": ["duomo-florence"],
+      "rome": ["ecole-athenes", "creation-adam"]
+    },
+    "concepts": {
+      "mecenat": ["laurent-medicis"],
+      "humanisme": ["homme-vitruve"]
+    }
+  }
+}

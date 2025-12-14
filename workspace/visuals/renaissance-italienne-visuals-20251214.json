@@ -1,0 +1,201 @@
+{
+  "sujet": "La Renaissance italienne",
+  "dateGeneration": "2024-12-14",
+  "agent": "diagrammer",
+  "visualisations": {
+    "timeline": {
+      "titre": "Chronologie de la Renaissance italienne",
+      "type": "timeline",
+      "periodes": [
+        {
+          "nom": "Proto-Renaissance (Trecento)",
+          "debut": 1300,
+          "fin": 1400,
+          "couleur": "#E8D4B8",
+          "evenements": [
+            {"date": "1307-1321", "titre": "Divine Comédie", "description": "Dante écrit son chef-d'œuvre"},
+            {"date": "1337", "titre": "Giotto meurt", "description": "Pionnier du réalisme en peinture"},
+            {"date": "1348", "titre": "Peste noire", "description": "Décime l'Europe, accélère les changements"},
+            {"date": "1374", "titre": "Mort de Pétrarque", "description": "Père de l'humanisme"}
+          ]
+        },
+        {
+          "nom": "Première Renaissance (Quattrocento)",
+          "debut": 1400,
+          "fin": 1500,
+          "couleur": "#D4A574",
+          "evenements": [
+            {"date": "1401", "titre": "Concours de Florence", "description": "Brunelleschi vs Ghiberti pour les portes du Baptistère"},
+            {"date": "1420-1436", "titre": "Dôme de Florence", "description": "Brunelleschi révolutionne l'architecture"},
+            {"date": "1434", "titre": "Cosme de Médicis", "description": "Prend le pouvoir à Florence"},
+            {"date": "1452", "titre": "Naissance de Léonard", "description": "À Vinci, près de Florence"},
+            {"date": "1469-1492", "titre": "Laurent le Magnifique", "description": "Apogée du mécénat florentin"},
+            {"date": "1475", "titre": "Naissance de Michel-Ange", "description": "À Caprese, Toscane"},
+            {"date": "1492", "titre": "Mort de Laurent", "description": "Fin d'une époque pour Florence"}
+          ]
+        },
+        {
+          "nom": "Haute Renaissance (Cinquecento)",
+          "debut": 1500,
+          "fin": 1600,
+          "couleur": "#8B4513",
+          "evenements": [
+            {"date": "1503-1519", "titre": "La Joconde", "description": "Léonard peint son chef-d'œuvre"},
+            {"date": "1504", "titre": "David dévoilé", "description": "Michel-Ange à Florence"},
+            {"date": "1508-1512", "titre": "Chapelle Sixtine", "description": "Michel-Ange peint le plafond"},
+            {"date": "1509-1511", "titre": "École d'Athènes", "description": "Raphaël au Vatican"},
+            {"date": "1519", "titre": "Mort de Léonard", "description": "En France, dans les bras de François Ier"},
+            {"date": "1527", "titre": "Sac de Rome", "description": "Fin symbolique de la Haute Renaissance"},
+            {"date": "1564", "titre": "Mort de Michel-Ange", "description": "À 88 ans, à Rome"}
+          ]
+        }
+      ]
+    },
+    "comparison": {
+      "titre": "Les trois génies de la Renaissance",
+      "type": "comparison",
+      "elements": [
+        {
+          "nom": "Léonard de Vinci",
+          "image": "leonard-portrait",
+          "dates": "1452-1519",
+          "attributs": {
+            "Spécialité principale": "Peinture, Sciences",
+            "Style": "Sfumato, réalisme atmosphérique",
+            "Personnalité": "Curieux, élégant, végétarien",
+            "Œuvres majeures": "La Joconde, La Cène",
+            "Surnom": "Le génie universel",
+            "Point fort": "Polyvalence absolue",
+            "Mécènes": "Sforza, Borgia, François Ier"
+          }
+        },
+        {
+          "nom": "Michel-Ange",
+          "image": "david",
+          "dates": "1475-1564",
+          "attributs": {
+            "Spécialité principale": "Sculpture, Architecture",
+            "Style": "Terribilità, puissance musculaire",
+            "Personnalité": "Irascible, solitaire, passionné",
+            "Œuvres majeures": "David, Chapelle Sixtine",
+            "Surnom": "Il Divino",
+            "Point fort": "Maîtrise du marbre",
+            "Mécènes": "Médicis, Papes Jules II et Paul III"
+          }
+        },
+        {
+          "nom": "Raphaël",
+          "image": "ecole-athenes",
+          "dates": "1483-1520",
+          "attributs": {
+            "Spécialité principale": "Peinture",
+            "Style": "Grâce, harmonie parfaite",
+            "Personnalité": "Charmant, sociable, populaire",
+            "Œuvres majeures": "École d'Athènes, Madones",
+            "Surnom": "Le prince des peintres",
+            "Point fort": "Synthèse des styles",
+            "Mécènes": "Papes Jules II et Léon X"
+          }
+        }
+      ]
+    },
+    "diagram": {
+      "titre": "L'écosystème de la Renaissance",
+      "type": "mindmap",
+      "centre": "Renaissance italienne",
+      "branches": [
+        {
+          "nom": "Villes",
+          "couleur": "#2196F3",
+          "elements": [
+            {"nom": "Florence", "detail": "Berceau de la Renaissance"},
+            {"nom": "Rome", "detail": "Centre papal"},
+            {"nom": "Venise", "detail": "Maîtrise de la couleur"},
+            {"nom": "Milan", "detail": "Cour des Sforza"}
+          ]
+        },
+        {
+          "nom": "Mécènes",
+          "couleur": "#FFD700",
+          "elements": [
+            {"nom": "Médicis", "detail": "Banquiers de Florence"},
+            {"nom": "Papes", "detail": "Jules II, Léon X"},
+            {"nom": "Sforza", "detail": "Ducs de Milan"},
+            {"nom": "Este", "detail": "Ferrare"}
+          ]
+        },
+        {
+          "nom": "Innovations",
+          "couleur": "#4CAF50",
+          "elements": [
+            {"nom": "Perspective", "detail": "Brunelleschi"},
+            {"nom": "Sfumato", "detail": "Léonard"},
+            {"nom": "Anatomie", "detail": "Dissections"},
+            {"nom": "Imprimerie", "detail": "Diffusion du savoir"}
+          ]
+        },
+        {
+          "nom": "Idées",
+          "couleur": "#9C27B0",
+          "elements": [
+            {"nom": "Humanisme", "detail": "L'homme au centre"},
+            {"nom": "Uomo universale", "detail": "Homme universel"},
+            {"nom": "Antiquité", "detail": "Redécouverte"},
+            {"nom": "Beauté", "detail": "Idéal esthétique"}
+          ]
+        }
+      ]
+    },
+    "cards": {
+      "titre": "Fiches artistes",
+      "type": "cards",
+      "cartes": [
+        {
+          "recto": {
+            "titre": "Qui a peint le plafond de la Chapelle Sixtine ?",
+            "image": "creation-adam"
+          },
+          "verso": {
+            "reponse": "Michel-Ange",
+            "details": "Entre 1508 et 1512, debout (pas couché !), sur des échafaudages de sa conception",
+            "anecdote": "Il a refusé d'ajouter de l'or malgré les demandes du pape"
+          }
+        },
+        {
+          "recto": {
+            "titre": "Quel architecte a construit le dôme de Florence ?",
+            "image": "duomo-florence"
+          },
+          "verso": {
+            "reponse": "Filippo Brunelleschi",
+            "details": "Construction de 1420 à 1436, sans échafaudage central",
+            "anecdote": "Il a perdu le concours des portes du Baptistère face à Ghiberti, et s'est vengé en révolutionnant l'architecture"
+          }
+        },
+        {
+          "recto": {
+            "titre": "Quelle famille a dominé Florence pendant la Renaissance ?",
+            "image": "laurent-medicis"
+          },
+          "verso": {
+            "reponse": "Les Médicis",
+            "details": "Banquiers devenus dirigeants, puis papes",
+            "anecdote": "Laurent le Magnifique n'était pas beau mais séduisait par son esprit et sa générosité"
+          }
+        }
+      ]
+    },
+    "stats": {
+      "titre": "La Renaissance en chiffres",
+      "type": "infographic",
+      "donnees": [
+        {"label": "Durée", "valeur": "300 ans", "detail": "1300-1600"},
+        {"label": "Artistes majeurs", "valeur": "50+", "detail": "Peintres, sculpteurs, architectes"},
+        {"label": "Hauteur du David", "valeur": "5,17 m", "detail": "Bloc de marbre abandonné"},
+        {"label": "Surface Sixtine", "valeur": "500 m²", "detail": "Plafond peint par Michel-Ange"},
+        {"label": "Temps Joconde", "valeur": "16 ans", "detail": "1503-1519"},
+        {"label": "Papes mécènes", "valeur": "3", "detail": "Jules II, Léon X, Paul III"}
+      ]
+    }
+  }
+}
