@@ -95,9 +95,9 @@ Sauvegarde le résultat final dans : ${outputPath}
 IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du contenu.
 `
 
-  // Spawn Claude Code CLI
+  // Spawn Claude Code CLI with streaming JSON output
   console.log(`🚀 Lancement de Claude Code (ID: ${id})...`)
-  const claude = spawn('claude', ['--print', prompt], {
+  const claude = spawn('claude', ['--output-format', 'stream-json', '--verbose', prompt], {
     cwd: PROJECT_ROOT,
     env: { ...process.env },
     stdio: ['pipe', 'pipe', 'pipe']
@@ -105,29 +105,97 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
 
   let output = ''
   let errorOutput = ''
+  let buffer = ''
+  let toolCallCount = 0
+  let currentPhase = 'Démarrage'
 
-  console.log(`⏳ Génération en cours...`)
+  console.log(`⏳ Génération en cours...\n`)
 
   claude.stdout.on('data', (data) => {
-    const text = data.toString()
-    output += text
+    buffer += data.toString()
 
-    // Update progress based on output
-    const gen = generations.get(id)
-    if (gen) {
-      gen.logs.push(text)
+    // Parse JSON lines (each line is a JSON event)
+    const lines = buffer.split('\n')
+    buffer = lines.pop() || '' // Keep incomplete line in buffer
 
-      // Detect progress from output
-      if (text.includes('recherche') || text.includes('WebSearch')) {
-        gen.progress = 'Recherche en cours...'
-      } else if (text.includes('image') || text.includes('Wikimedia')) {
-        gen.progress = 'Recherche d\'images...'
-      } else if (text.includes('fiche') || text.includes('section')) {
-        gen.progress = 'Rédaction de la fiche...'
-      } else if (text.includes('question') || text.includes('QCM')) {
-        gen.progress = 'Création des questions...'
-      } else if (text.includes('Sauvegarde') || text.includes('output')) {
-        gen.progress = 'Finalisation...'
+    for (const line of lines) {
+      if (!line.trim()) continue
+
+      try {
+        const event = JSON.parse(line)
+        output += line + '\n'
+
+        const gen = generations.get(id)
+        if (!gen) continue
+
+        gen.logs.push(event)
+
+        // Parse event type for progress
+        if (event.type === 'tool_use' || event.type === 'tool_call') {
+          toolCallCount++
+          const toolName = event.name || event.tool || 'unknown'
+
+          // Detailed logging based on tool
+          if (toolName === 'WebSearch') {
+            currentPhase = 'Recherche'
+            const query = event.input?.query || event.parameters?.query || ''
+            console.log(`   🔍 [${toolCallCount}] WebSearch: "${query.substring(0, 50)}..."`)
+            gen.progress = `Recherche: ${query.substring(0, 30)}...`
+          } else if (toolName === 'WebFetch') {
+            console.log(`   🌐 [${toolCallCount}] WebFetch: récupération page...`)
+            gen.progress = 'Récupération de contenu web...'
+          } else if (toolName === 'Read') {
+            const file = event.input?.file_path || event.parameters?.file_path || ''
+            const shortFile = file.split('/').pop()
+            console.log(`   📖 [${toolCallCount}] Read: ${shortFile}`)
+            if (file.includes('agent')) {
+              gen.progress = `Lecture agent: ${shortFile}`
+            }
+          } else if (toolName === 'Write') {
+            const file = event.input?.file_path || event.parameters?.file_path || ''
+            const shortFile = file.split('/').pop()
+            console.log(`   💾 [${toolCallCount}] Write: ${shortFile}`)
+            if (file.includes('research')) {
+              currentPhase = 'Recherche'
+              gen.progress = 'Sauvegarde recherche...'
+            } else if (file.includes('images')) {
+              currentPhase = 'Images'
+              gen.progress = 'Sauvegarde images...'
+            } else if (file.includes('output')) {
+              currentPhase = 'Finalisation'
+              gen.progress = 'Sauvegarde finale...'
+            }
+          } else if (toolName === 'Glob' || toolName === 'Grep') {
+            console.log(`   🔎 [${toolCallCount}] ${toolName}`)
+          } else if (toolName === 'Task') {
+            console.log(`   🤖 [${toolCallCount}] Task: sous-agent lancé`)
+            gen.progress = 'Sous-agent en cours...'
+          } else {
+            console.log(`   🔧 [${toolCallCount}] ${toolName}`)
+          }
+        } else if (event.type === 'assistant' && event.message) {
+          // Check message content for phase detection
+          const msg = typeof event.message === 'string' ? event.message : JSON.stringify(event.message)
+          if (msg.toLowerCase().includes('recherche')) {
+            currentPhase = 'Recherche'
+            gen.progress = 'Phase recherche...'
+          } else if (msg.toLowerCase().includes('image')) {
+            currentPhase = 'Images'
+            gen.progress = 'Phase images...'
+          } else if (msg.toLowerCase().includes('fiche') || msg.toLowerCase().includes('rédaction')) {
+            currentPhase = 'Rédaction'
+            gen.progress = 'Rédaction fiche...'
+          } else if (msg.toLowerCase().includes('question') || msg.toLowerCase().includes('qcm')) {
+            currentPhase = 'Questions'
+            gen.progress = 'Création questions...'
+          }
+        } else if (event.type === 'result' || event.type === 'final') {
+          console.log(`   ✨ Résultat reçu`)
+        }
+
+      } catch (e) {
+        // Not valid JSON, might be partial output
+        output += line + '\n'
       }
     }
   })
@@ -141,7 +209,8 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
   })
 
   claude.on('close', async (code) => {
-    console.log(`\n📋 Claude Code terminé (code: ${code})`)
+    const duration = ((Date.now() - new Date(generations.get(id)?.startedAt).getTime()) / 1000).toFixed(1)
+    console.log(`\n📋 Claude Code terminé (code: ${code}) - Durée: ${duration}s - ${toolCallCount} appels d'outils`)
     const gen = generations.get(id)
     if (!gen) return
 
@@ -154,7 +223,9 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
         gen.progress = 'Terminé !'
         gen.result = result
         gen.completedAt = new Date().toISOString()
+        gen.stats = { duration: parseFloat(duration), toolCalls: toolCallCount }
         console.log(`✅ Fiche générée avec succès !`)
+        console.log(`   📊 Stats: ${toolCallCount} outils, ${duration}s`)
       } catch (err) {
         // Try to extract JSON from output
         try {
