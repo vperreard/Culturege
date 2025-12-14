@@ -69,6 +69,25 @@ function App() {
     }
   }, [isLoaded, isFirstVisit, updateData])
 
+  // Sync new fiches and questions from initial data (for updates)
+  useEffect(() => {
+    if (isLoaded && !isFirstVisit && data) {
+      const existingFicheIds = new Set((data.fiches || []).map(f => f.id))
+      const existingQuestionIds = new Set((data.questions || []).map(q => q.id))
+
+      const newFiches = initialFichesData.fiches.filter(f => !existingFicheIds.has(f.id))
+      const newQuestions = initialQuestionsData.questions.filter(q => !existingQuestionIds.has(q.id))
+
+      if (newFiches.length > 0 || newQuestions.length > 0) {
+        console.log(`Sync: ${newFiches.length} nouvelles fiches, ${newQuestions.length} nouvelles questions`)
+        updateData({
+          fiches: [...(data.fiches || []), ...newFiches],
+          questions: [...(data.questions || []), ...newQuestions]
+        })
+      }
+    }
+  }, [isLoaded, isFirstVisit, data?.fiches?.length, data?.questions?.length])
+
   // Update last active date and check streak
   useEffect(() => {
     if (isLoaded && data?.userProgress) {
