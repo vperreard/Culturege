@@ -69,12 +69,11 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
 
     console.log(`\n${emoji} [${label}] Démarrage...`)
 
-    // Use --print for simpler output
-    const claude = spawn('claude', ['--print', prompt], {
+    // Use -p flag with prompt passed via stdin for long prompts
+    const claude = spawn('claude', ['-p'], {
       cwd: PROJECT_ROOT,
       env: { ...process.env },
-      stdio: ['pipe', 'pipe', 'pipe'],
-      shell: true
+      stdio: ['pipe', 'pipe', 'pipe']
     })
 
     if (!claude.pid) {
@@ -84,6 +83,11 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
     }
 
     console.log(`   ${emoji} [${label}] 🔧 PID: ${claude.pid}`)
+
+    // Write prompt to stdin
+    claude.stdin.write(prompt)
+    claude.stdin.end()
+    console.log(`   ${emoji} [${label}] 📝 Prompt envoyé (${prompt.length} chars)`)
 
     let output = ''
     let errorOutput = ''
