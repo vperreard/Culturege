@@ -69,68 +69,73 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
 
     console.log(`\n${emoji} [${label}] Démarrage...`)
 
-    const claude = spawn('claude', ['--output-format', 'stream-json', '--verbose', prompt], {
+    // Use --print for simpler output
+    const claude = spawn('claude', ['--print', prompt], {
       cwd: PROJECT_ROOT,
       env: { ...process.env },
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
+      shell: true
     })
 
+    if (!claude.pid) {
+      console.log(`   ${emoji} [${label}] ❌ Échec du spawn!`)
+      reject(new Error('Failed to spawn claude process'))
+      return
+    }
+
+    console.log(`   ${emoji} [${label}] 🔧 PID: ${claude.pid}`)
+
     let output = ''
-    let buffer = ''
-    let toolCallCount = 0
+    let errorOutput = ''
+    let activityCount = 0
     const startTime = Date.now()
+    let lastLogTime = Date.now()
+
+    // Heartbeat every 30 seconds to show it's still running
+    const heartbeat = setInterval(() => {
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(0)
+      console.log(`   ${emoji} [${label}] ⏳ En cours... (${elapsed}s, ${activityCount} activités)`)
+    }, 30000)
 
     claude.stdout.on('data', (data) => {
-      buffer += data.toString()
-      const lines = buffer.split('\n')
-      buffer = lines.pop() || ''
+      const text = data.toString()
+      output += text
+      activityCount++
 
-      for (const line of lines) {
-        if (!line.trim()) continue
-
-        try {
-          const event = JSON.parse(line)
-          output += line + '\n'
-
-          // Parse event type for logging
-          if (event.type === 'tool_use' || event.type === 'tool_call') {
-            toolCallCount++
-            const toolName = event.name || event.tool || 'unknown'
-
-            if (toolName === 'WebSearch') {
-              const query = event.input?.query || event.parameters?.query || ''
-              console.log(`   ${emoji} [${label}] 🔍 WebSearch: "${query.substring(0, 40)}..."`)
-              gen.progress = `[${label}] Recherche: ${query.substring(0, 25)}...`
-            } else if (toolName === 'WebFetch') {
-              console.log(`   ${emoji} [${label}] 🌐 WebFetch`)
-              gen.progress = `[${label}] Récupération web...`
-            } else if (toolName === 'Write') {
-              const file = event.input?.file_path || event.parameters?.file_path || ''
-              const shortFile = file.split('/').pop()
-              console.log(`   ${emoji} [${label}] 💾 Write: ${shortFile}`)
-              gen.progress = `[${label}] Sauvegarde: ${shortFile}`
-            } else if (toolName === 'Read') {
-              const file = event.input?.file_path || event.parameters?.file_path || ''
-              const shortFile = file.split('/').pop()
-              console.log(`   ${emoji} [${label}] 📖 Read: ${shortFile}`)
-            }
-          }
-        } catch (e) {
-          output += line + '\n'
+      // Log activity periodically
+      if (Date.now() - lastLogTime > 10000) {
+        const preview = text.substring(0, 80).replace(/\n/g, ' ').trim()
+        if (preview) {
+          console.log(`   ${emoji} [${label}] 📤 "${preview}..."`)
         }
+        lastLogTime = Date.now()
+      }
+
+      // Detect specific actions in output
+      if (text.includes('WebSearch') || text.includes('searching')) {
+        gen.progress = `[${label}] Recherche web...`
+      } else if (text.includes('Write') || text.includes('writing')) {
+        gen.progress = `[${label}] Écriture...`
+      } else if (text.includes('Read') || text.includes('reading')) {
+        gen.progress = `[${label}] Lecture...`
       }
     })
 
-    let errorOutput = ''
     claude.stderr.on('data', (data) => {
-      errorOutput += data.toString()
+      const text = data.toString()
+      errorOutput += text
+      // Log stderr for debugging
+      console.log(`   ${emoji} [${label}] ⚠️ stderr: ${text.substring(0, 100)}`)
     })
 
     claude.on('close', async (code) => {
+      clearInterval(heartbeat)
       const duration = ((Date.now() - startTime) / 1000).toFixed(1)
 
+      console.log(`   ${emoji} [${label}] 📋 Terminé avec code: ${code}`)
+
       if (code === 0) {
-        console.log(`   ${emoji} [${label}] ✅ Terminé (${duration}s, ${toolCallCount} outils)`)
+        console.log(`   ${emoji} [${label}] ✅ Succès (${duration}s)`)
 
         // Try to read output file if specified
         let result = null
@@ -138,7 +143,9 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
           try {
             const content = await fs.readFile(outputFile, 'utf-8')
             result = JSON.parse(content)
+            console.log(`   ${emoji} [${label}] 📁 Fichier lu: ${outputFile}`)
           } catch (e) {
+            console.log(`   ${emoji} [${label}] ⚠️ Fichier non trouvé, parsing output...`)
             // Try to extract JSON from output
             const jsonMatch = output.match(/\{[\s\S]*\}/)
             if (jsonMatch) {
@@ -149,15 +156,17 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
           }
         }
 
-        resolve({ output, toolCalls: toolCallCount, duration: parseFloat(duration), result })
+        resolve({ output, toolCalls: activityCount, duration: parseFloat(duration), result })
       } else {
         console.log(`   ${emoji} [${label}] ❌ Erreur (code: ${code})`)
+        console.log(`   ${emoji} [${label}] ❌ stderr: ${errorOutput.substring(0, 200)}`)
         reject(new Error(errorOutput || `Process exited with code ${code}`))
       }
     })
 
     claude.on('error', (err) => {
-      console.log(`   ${emoji} [${label}] ❌ Erreur: ${err.message}`)
+      clearInterval(heartbeat)
+      console.log(`   ${emoji} [${label}] ❌ Spawn error: ${err.message}`)
       reject(err)
     })
   })
