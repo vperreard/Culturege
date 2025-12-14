@@ -24,7 +24,7 @@
 
 import express from 'express'
 import cors from 'cors'
-import { spawn } from 'child_process'
+import { spawn, execSync } from 'child_process'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs/promises'
@@ -425,6 +425,28 @@ app.get('/logs/:id', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', port: PORT, mode: 'parallel' })
 })
+
+// Test if claude command is available
+try {
+  const claudePath = execSync('which claude', { encoding: 'utf-8' }).trim()
+  console.log(`✅ Claude trouvé: ${claudePath}`)
+
+  // Test a simple command
+  const version = execSync('claude --version', { encoding: 'utf-8', timeout: 5000 }).trim()
+  console.log(`✅ Version: ${version}`)
+
+  // Test a simple prompt
+  console.log(`🧪 Test d'un prompt simple...`)
+  const testResult = execSync('claude -p "Dis juste OK"', {
+    encoding: 'utf-8',
+    timeout: 30000,
+    cwd: PROJECT_ROOT
+  }).trim()
+  console.log(`✅ Réponse test: ${testResult.substring(0, 100)}`)
+} catch (e) {
+  console.log(`❌ Claude non accessible: ${e.message}`)
+  console.log(`   Vérifiez que claude est installé et dans le PATH`)
+}
 
 // Start server
 app.listen(PORT, () => {
