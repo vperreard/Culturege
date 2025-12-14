@@ -42,6 +42,7 @@ function generateId() {
  */
 app.post('/generate', async (req, res) => {
   const { topic, category } = req.body
+  console.log(`\n📥 Nouvelle requête: "${topic}" (${category || 'histoire'})`)
 
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required' })
@@ -95,6 +96,7 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
 `
 
   // Spawn Claude Code CLI
+  console.log(`🚀 Lancement de Claude Code (ID: ${id})...`)
   const claude = spawn('claude', ['--print', prompt], {
     cwd: PROJECT_ROOT,
     env: { ...process.env },
@@ -103,6 +105,8 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
 
   let output = ''
   let errorOutput = ''
+
+  console.log(`⏳ Génération en cours...`)
 
   claude.stdout.on('data', (data) => {
     const text = data.toString()
@@ -137,6 +141,7 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
   })
 
   claude.on('close', async (code) => {
+    console.log(`\n📋 Claude Code terminé (code: ${code})`)
     const gen = generations.get(id)
     if (!gen) return
 
@@ -149,6 +154,7 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
         gen.progress = 'Terminé !'
         gen.result = result
         gen.completedAt = new Date().toISOString()
+        console.log(`✅ Fiche générée avec succès !`)
       } catch (err) {
         // Try to extract JSON from output
         try {
@@ -177,6 +183,7 @@ IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du
   })
 
   claude.on('error', (err) => {
+    console.log(`❌ Erreur Claude Code: ${err.message}`)
     const gen = generations.get(id)
     if (gen) {
       gen.status = 'error'
