@@ -1,8 +1,22 @@
 /**
  * Bridge Server - Connects the PWA to Claude Code CLI
  *
- * This server receives requests from the app and spawns Claude Code
- * to generate fiches using the multi-agent pipeline.
+ * SMART PARALLEL ARCHITECTURE:
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │  Phase 1 (parallel)       Phase 2 (sequential)    Phase 3          │
+ * │  ┌──────────────┐                                                  │
+ * │  │  Recherche   │─────┐    ┌──────────────┐      ┌──────────────┐  │
+ * │  └──────────────┘     ├───▶│    Fiche     │─────▶│  Questions   │  │
+ * │         +             │    │ (+ images)   │      │(basées fiche)│  │
+ * │  ┌──────────────┐     │    └──────────────┘      └──────────────┘  │
+ * │  │   Images     │─────┘                                            │
+ * │  └──────────────┘                                                  │
+ * └─────────────────────────────────────────────────────────────────────┘
+ *
+ * Why this order:
+ * - Research + Images can run in parallel (both based on topic)
+ * - Fiche needs research AND images to place them correctly
+ * - Questions MUST come after fiche to reference actual content
  *
  * Usage: node server/bridge.js
  * Port: 7001
@@ -36,13 +50,128 @@ function generateId() {
 }
 
 /**
+ * Spawn a Claude Code process with streaming output
+ * @param {string} prompt - The prompt to send to Claude
+ * @param {string} label - Label for logging (e.g., "Recherche", "Images")
+ * @param {object} gen - Generation object to update progress
+ * @param {string} outputFile - Optional output file path
+ * @returns {Promise<{output: string, toolCalls: number}>}
+ */
+function spawnClaudeTask(prompt, label, gen, outputFile = null) {
+  return new Promise((resolve, reject) => {
+    const emoji = {
+      'Recherche': '🔬',
+      'Images': '🖼️',
+      'Fiche': '📝',
+      'Questions': '❓',
+      'Assembly': '🔧'
+    }[label] || '⚙️'
+
+    console.log(`\n${emoji} [${label}] Démarrage...`)
+
+    const claude = spawn('claude', ['--output-format', 'stream-json', '--verbose', prompt], {
+      cwd: PROJECT_ROOT,
+      env: { ...process.env },
+      stdio: ['pipe', 'pipe', 'pipe']
+    })
+
+    let output = ''
+    let buffer = ''
+    let toolCallCount = 0
+    const startTime = Date.now()
+
+    claude.stdout.on('data', (data) => {
+      buffer += data.toString()
+      const lines = buffer.split('\n')
+      buffer = lines.pop() || ''
+
+      for (const line of lines) {
+        if (!line.trim()) continue
+
+        try {
+          const event = JSON.parse(line)
+          output += line + '\n'
+
+          // Parse event type for logging
+          if (event.type === 'tool_use' || event.type === 'tool_call') {
+            toolCallCount++
+            const toolName = event.name || event.tool || 'unknown'
+
+            if (toolName === 'WebSearch') {
+              const query = event.input?.query || event.parameters?.query || ''
+              console.log(`   ${emoji} [${label}] 🔍 WebSearch: "${query.substring(0, 40)}..."`)
+              gen.progress = `[${label}] Recherche: ${query.substring(0, 25)}...`
+            } else if (toolName === 'WebFetch') {
+              console.log(`   ${emoji} [${label}] 🌐 WebFetch`)
+              gen.progress = `[${label}] Récupération web...`
+            } else if (toolName === 'Write') {
+              const file = event.input?.file_path || event.parameters?.file_path || ''
+              const shortFile = file.split('/').pop()
+              console.log(`   ${emoji} [${label}] 💾 Write: ${shortFile}`)
+              gen.progress = `[${label}] Sauvegarde: ${shortFile}`
+            } else if (toolName === 'Read') {
+              const file = event.input?.file_path || event.parameters?.file_path || ''
+              const shortFile = file.split('/').pop()
+              console.log(`   ${emoji} [${label}] 📖 Read: ${shortFile}`)
+            }
+          }
+        } catch (e) {
+          output += line + '\n'
+        }
+      }
+    })
+
+    let errorOutput = ''
+    claude.stderr.on('data', (data) => {
+      errorOutput += data.toString()
+    })
+
+    claude.on('close', async (code) => {
+      const duration = ((Date.now() - startTime) / 1000).toFixed(1)
+
+      if (code === 0) {
+        console.log(`   ${emoji} [${label}] ✅ Terminé (${duration}s, ${toolCallCount} outils)`)
+
+        // Try to read output file if specified
+        let result = null
+        if (outputFile) {
+          try {
+            const content = await fs.readFile(outputFile, 'utf-8')
+            result = JSON.parse(content)
+          } catch (e) {
+            // Try to extract JSON from output
+            const jsonMatch = output.match(/\{[\s\S]*\}/)
+            if (jsonMatch) {
+              try {
+                result = JSON.parse(jsonMatch[0])
+              } catch (e2) { /* ignore */ }
+            }
+          }
+        }
+
+        resolve({ output, toolCalls: toolCallCount, duration: parseFloat(duration), result })
+      } else {
+        console.log(`   ${emoji} [${label}] ❌ Erreur (code: ${code})`)
+        reject(new Error(errorOutput || `Process exited with code ${code}`))
+      }
+    })
+
+    claude.on('error', (err) => {
+      console.log(`   ${emoji} [${label}] ❌ Erreur: ${err.message}`)
+      reject(err)
+    })
+  })
+}
+
+/**
  * POST /generate
- * Start a new fiche generation
- * Body: { topic: string, category: string }
+ * Start a new fiche generation with PARALLEL execution
  */
 app.post('/generate', async (req, res) => {
   const { topic, category } = req.body
-  console.log(`\n📥 Nouvelle requête: "${topic}" (${category || 'histoire'})`)
+  console.log(`\n${'═'.repeat(60)}`)
+  console.log(`📥 NOUVELLE GÉNÉRATION: "${topic}" (${category || 'histoire'})`)
+  console.log(`${'═'.repeat(60)}`)
 
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required' })
@@ -50,229 +179,318 @@ app.post('/generate', async (req, res) => {
 
   const id = generateId()
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-  const outputPath = join(PROJECT_ROOT, 'workspace', 'output', `${topic.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.json`)
+  const topicSlug = topic.toLowerCase().replace(/\s+/g, '-').substring(0, 30)
+
+  // Create workspace directories
+  const workspacePaths = {
+    research: join(PROJECT_ROOT, 'workspace', 'research', `${topicSlug}-${timestamp}.md`),
+    images: join(PROJECT_ROOT, 'workspace', 'images', `${topicSlug}-${timestamp}.json`),
+    fiche: join(PROJECT_ROOT, 'workspace', 'fiches', `${topicSlug}-${timestamp}.json`),
+    questions: join(PROJECT_ROOT, 'workspace', 'questions', `${topicSlug}-${timestamp}.json`),
+    output: join(PROJECT_ROOT, 'workspace', 'output', `${topicSlug}-${timestamp}.json`)
+  }
+
+  // Ensure directories exist
+  await Promise.all([
+    fs.mkdir(join(PROJECT_ROOT, 'workspace', 'research'), { recursive: true }),
+    fs.mkdir(join(PROJECT_ROOT, 'workspace', 'images'), { recursive: true }),
+    fs.mkdir(join(PROJECT_ROOT, 'workspace', 'fiches'), { recursive: true }),
+    fs.mkdir(join(PROJECT_ROOT, 'workspace', 'questions'), { recursive: true }),
+    fs.mkdir(join(PROJECT_ROOT, 'workspace', 'output'), { recursive: true })
+  ])
 
   // Initialize generation status
-  generations.set(id, {
+  const gen = {
     id,
     topic,
     category: category || 'histoire',
     status: 'running',
-    progress: 'Démarrage...',
+    progress: 'Initialisation...',
+    phase: 1,
     logs: [],
     startedAt: new Date().toISOString(),
-    outputPath
-  })
+    stats: { phase1: null, phase2: null, total: null }
+  }
+  generations.set(id, gen)
 
-  // Build the prompt for Claude Code
-  const prompt = `
-Tu es dans le projet CultureMaster. Exécute le pipeline multi-agent pour créer une fiche sur "${topic}" (catégorie: ${category || 'histoire'}).
+  // Return immediately, process in background
+  res.json({ id, message: 'Generation started (parallel mode)', topic })
 
-ÉTAPES À SUIVRE :
+  // ════════════════════════════════════════════════════════════
+  // PHASE 1: Recherche + Images EN PARALLÈLE
+  // ════════════════════════════════════════════════════════════
+  console.log(`\n┌─────────────────────────────────────────────────────────┐`)
+  console.log(`│  PHASE 1: Recherche + Images (PARALLÈLE)                │`)
+  console.log(`└─────────────────────────────────────────────────────────┘`)
 
-1. RECHERCHE : Lis .claude/agents/researcher.md et effectue une recherche approfondie avec WebSearch (8-10 recherches différentes). Sauvegarde dans workspace/research/
+  gen.phase = 1
+  gen.progress = 'Phase 1: Recherche + Images en parallèle...'
 
-2. IMAGES : Lis .claude/agents/image-curator.md et trouve 8-10 images sur Wikimedia Commons. Sauvegarde dans workspace/images/
+  const researchPrompt = `
+Tu es dans le projet CultureMaster. Lis le fichier .claude/agents/researcher.md et effectue une recherche APPROFONDIE sur "${topic}" (catégorie: ${category || 'histoire'}).
 
-3. FICHE : Lis .claude/agents/fiche-writer.md et crée une fiche EXCEPTIONNELLE avec :
-   - heroImage (URL Wikimedia)
-   - sections avec images intégrées
-   - timeline narrative avec stories
-   - contenu profond (4-5 paragraphes par section)
+INSTRUCTIONS:
+1. Lis d'abord .claude/agents/researcher.md pour comprendre la méthodologie
+2. Effectue 8-10 recherches WebSearch différentes sur le sujet
+3. Couvre: définition, histoire, concepts clés, exemples, controverses, actualités
+4. Sauvegarde ta recherche complète dans: ${workspacePaths.research}
 
-4. QUESTIONS : Lis .claude/agents/qcm-generator.md et crée 10 questions variées
-
-5. ASSEMBLAGE FINAL : Crée le fichier JSON final avec la fiche ET les questions dans workspace/output/
-
-Le fichier final doit être un JSON valide avec cette structure :
-{
-  "fiche": { ... },
-  "questions": [ ... ]
-}
-
-Sauvegarde le résultat final dans : ${outputPath}
-
-IMPORTANT : Respecte STRICTEMENT les instructions des agents pour la qualité du contenu.
+Format de sortie: Un fichier markdown structuré avec toutes les informations trouvées.
 `
 
-  // Spawn Claude Code CLI
-  console.log(`🚀 Lancement de Claude Code (ID: ${id})...`)
-  const claude = spawn('claude', ['--print', prompt], {
-    cwd: PROJECT_ROOT,
-    env: { ...process.env },
-    stdio: ['pipe', 'pipe', 'pipe']
-  })
+  const imagesPrompt = `
+Tu es dans le projet CultureMaster. Lis le fichier .claude/agents/image-curator.md et trouve des images pour "${topic}".
 
-  let output = ''
-  let errorOutput = ''
+INSTRUCTIONS:
+1. Lis d'abord .claude/agents/image-curator.md
+2. Recherche 8-10 images pertinentes sur Wikimedia Commons
+3. Pour chaque image: URL, titre, description, attribution
+4. Sauvegarde dans: ${workspacePaths.images}
 
-  console.log(`⏳ Génération en cours...`)
+Format JSON:
+{
+  "heroImage": { "url": "...", "title": "...", "attribution": "..." },
+  "images": [{ "url": "...", "title": "...", "attribution": "...", "context": "..." }]
+}
+`
 
-  claude.stdout.on('data', (data) => {
-    const text = data.toString()
-    output += text
+  try {
+    const phase1Start = Date.now()
+    const [researchResult, imagesResult] = await Promise.all([
+      spawnClaudeTask(researchPrompt, 'Recherche', gen, workspacePaths.research),
+      spawnClaudeTask(imagesPrompt, 'Images', gen, workspacePaths.images)
+    ])
 
-    // Update progress based on output
-    const gen = generations.get(id)
-    if (gen) {
-      gen.logs.push(text)
-
-      // Detect progress from output
-      if (text.includes('recherche') || text.includes('WebSearch')) {
-        gen.progress = 'Recherche en cours...'
-      } else if (text.includes('image') || text.includes('Wikimedia')) {
-        gen.progress = 'Recherche d\'images...'
-      } else if (text.includes('fiche') || text.includes('section')) {
-        gen.progress = 'Rédaction de la fiche...'
-      } else if (text.includes('question') || text.includes('QCM')) {
-        gen.progress = 'Création des questions...'
-      } else if (text.includes('Sauvegarde') || text.includes('output')) {
-        gen.progress = 'Finalisation...'
-      }
+    gen.stats.phase1 = {
+      duration: ((Date.now() - phase1Start) / 1000).toFixed(1),
+      researchTools: researchResult.toolCalls,
+      imagesTools: imagesResult.toolCalls
     }
-  })
+    console.log(`\n✅ Phase 1 terminée en ${gen.stats.phase1.duration}s`)
 
-  claude.stderr.on('data', (data) => {
-    errorOutput += data.toString()
-    const gen = generations.get(id)
-    if (gen) {
-      gen.logs.push(`[stderr] ${data.toString()}`)
+    // ════════════════════════════════════════════════════════════
+    // PHASE 2: Rédaction de la Fiche (SÉQUENTIEL - a besoin des images)
+    // ════════════════════════════════════════════════════════════
+    console.log(`\n┌─────────────────────────────────────────────────────────┐`)
+    console.log(`│  PHASE 2: Rédaction de la Fiche (avec images)           │`)
+    console.log(`└─────────────────────────────────────────────────────────┘`)
+
+    gen.phase = 2
+    gen.progress = 'Phase 2: Rédaction de la fiche...'
+
+    const fichePrompt = `
+Tu es dans le projet CultureMaster. Crée une fiche EXCEPTIONNELLE sur "${topic}".
+
+CONTEXTE DISPONIBLE:
+- Recherche complète: ${workspacePaths.research}
+- Images trouvées: ${workspacePaths.images}
+
+INSTRUCTIONS:
+1. Lis d'abord .claude/agents/fiche-writer.md pour le format exact
+2. Lis la recherche: ${workspacePaths.research}
+3. Lis les images disponibles: ${workspacePaths.images}
+4. Crée une fiche avec:
+   - heroImage: choisis la meilleure image comme hero
+   - 5-7 sections riches (4-5 paragraphes chacune)
+   - INTÈGRE les images dans les sections appropriées (image.position: "left", "right", "full")
+   - timeline narrative avec stories détaillées
+   - mythes vs réalité (format flip cards)
+5. Sauvegarde dans: ${workspacePaths.fiche}
+
+IMPORTANT:
+- Le contenu doit être PROFOND, pas superficiel. Chaque section = mini-article.
+- Place les images là où elles illustrent le mieux le texte.
+- Assure-toi que chaque fait important soit bien expliqué (pour les questions après).
+`
+
+    const phase2Start = Date.now()
+    const ficheResult = await spawnClaudeTask(fichePrompt, 'Fiche', gen, workspacePaths.fiche)
+
+    gen.stats.phase2 = {
+      duration: ((Date.now() - phase2Start) / 1000).toFixed(1),
+      ficheTools: ficheResult.toolCalls
     }
-  })
+    console.log(`\n✅ Phase 2 terminée en ${gen.stats.phase2.duration}s`)
 
-  claude.on('close', async (code) => {
-    console.log(`\n📋 Claude Code terminé (code: ${code})`)
-    const gen = generations.get(id)
-    if (!gen) return
+    // ════════════════════════════════════════════════════════════
+    // PHASE 3: Création des Questions (SÉQUENTIEL - basées sur la fiche)
+    // ════════════════════════════════════════════════════════════
+    console.log(`\n┌─────────────────────────────────────────────────────────┐`)
+    console.log(`│  PHASE 3: Questions QCM (basées sur la fiche)           │`)
+    console.log(`└─────────────────────────────────────────────────────────┘`)
 
-    if (code === 0) {
-      // Try to read the output file
-      try {
-        const fileContent = await fs.readFile(outputPath, 'utf-8')
-        const result = JSON.parse(fileContent)
-        gen.status = 'completed'
-        gen.progress = 'Terminé !'
-        gen.result = result
-        gen.completedAt = new Date().toISOString()
-        console.log(`✅ Fiche générée avec succès !`)
-      } catch (err) {
-        // Try to extract JSON from output
-        try {
-          const jsonMatch = output.match(/\{[\s\S]*"fiche"[\s\S]*\}/)
-          if (jsonMatch) {
-            gen.result = JSON.parse(jsonMatch[0])
-            gen.status = 'completed'
-            gen.progress = 'Terminé !'
-            gen.completedAt = new Date().toISOString()
-          } else {
-            gen.status = 'error'
-            gen.progress = 'Erreur de parsing'
-            gen.error = 'Could not find valid JSON in output'
-          }
-        } catch (parseErr) {
-          gen.status = 'error'
-          gen.progress = 'Erreur de parsing'
-          gen.error = parseErr.message
-        }
+    gen.phase = 3
+    gen.progress = 'Phase 3: Création des questions...'
+
+    const questionsPrompt = `
+Tu es dans le projet CultureMaster. Crée des questions QCM sur "${topic}".
+
+CONTEXTE - LIS CES FICHIERS:
+- La fiche rédigée: ${workspacePaths.fiche}
+- La recherche: ${workspacePaths.research}
+
+INSTRUCTIONS CRITIQUES:
+1. Lis d'abord .claude/agents/qcm-generator.md
+2. Lis ATTENTIVEMENT la fiche: ${workspacePaths.fiche}
+3. Crée 10 questions dont les réponses se trouvent DANS LA FICHE:
+   - 3 faciles (définitions, faits de base mentionnés dans la fiche)
+   - 4 moyennes (compréhension des concepts expliqués)
+   - 3 difficiles (détails spécifiques de la fiche)
+4. Chaque question: 4 options, 1 bonne réponse, explication avec référence à la section
+5. Sauvegarde dans: ${workspacePaths.questions}
+
+RÈGLE D'OR: Chaque bonne réponse DOIT pouvoir être trouvée dans le contenu de la fiche.
+Indique dans l'explication: "Cette information se trouve dans la section [X]"
+
+Format JSON: { "questions": [...] }
+`
+
+    const phase3Start = Date.now()
+    const questionsResult = await spawnClaudeTask(questionsPrompt, 'Questions', gen, workspacePaths.questions)
+
+    gen.stats.phase3 = {
+      duration: ((Date.now() - phase3Start) / 1000).toFixed(1),
+      questionsTools: questionsResult.toolCalls
+    }
+    console.log(`\n✅ Phase 3 terminée en ${gen.stats.phase3.duration}s`)
+
+    // ════════════════════════════════════════════════════════════
+    // PHASE 4: Assemblage final
+    // ════════════════════════════════════════════════════════════
+    console.log(`\n┌─────────────────────────────────────────────────────────┐`)
+    console.log(`│  PHASE 4: Assemblage final                              │`)
+    console.log(`└─────────────────────────────────────────────────────────┘`)
+
+    gen.phase = 4
+    gen.progress = 'Assemblage final...'
+
+    // Read the generated files and assemble
+    let fiche = null
+    let questions = null
+
+    try {
+      const ficheContent = await fs.readFile(workspacePaths.fiche, 'utf-8')
+      fiche = JSON.parse(ficheContent)
+    } catch (e) {
+      console.log('   ⚠️ Impossible de lire la fiche, tentative de parsing...')
+    }
+
+    try {
+      const questionsContent = await fs.readFile(workspacePaths.questions, 'utf-8')
+      const qData = JSON.parse(questionsContent)
+      questions = qData.questions || qData
+    } catch (e) {
+      console.log('   ⚠️ Impossible de lire les questions, tentative de parsing...')
+    }
+
+    if (fiche || questions) {
+      const finalResult = {
+        fiche: fiche || { title: topic, sections: [] },
+        questions: questions || []
       }
+
+      // Save final output
+      await fs.writeFile(workspacePaths.output, JSON.stringify(finalResult, null, 2))
+
+      const totalDuration = ((Date.now() - new Date(gen.startedAt).getTime()) / 1000).toFixed(1)
+      gen.stats.total = totalDuration
+      gen.status = 'completed'
+      gen.progress = 'Terminé !'
+      gen.result = finalResult
+      gen.completedAt = new Date().toISOString()
+
+      console.log(`\n${'═'.repeat(60)}`)
+      console.log(`✅ GÉNÉRATION TERMINÉE !`)
+      console.log(`   📊 Durée totale: ${totalDuration}s`)
+      console.log(`   📊 Phase 1 (Recherche+Images): ${gen.stats.phase1.duration}s`)
+      console.log(`   📊 Phase 2 (Fiche): ${gen.stats.phase2.duration}s`)
+      console.log(`   📊 Phase 3 (Questions): ${gen.stats.phase3.duration}s`)
+      console.log(`${'═'.repeat(60)}\n`)
     } else {
-      gen.status = 'error'
-      gen.progress = 'Erreur'
-      gen.error = errorOutput || `Process exited with code ${code}`
+      throw new Error('Impossible d\'assembler le résultat final')
     }
-  })
 
-  claude.on('error', (err) => {
-    console.log(`❌ Erreur Claude Code: ${err.message}`)
-    const gen = generations.get(id)
-    if (gen) {
-      gen.status = 'error'
-      gen.progress = 'Erreur'
-      gen.error = err.message
-    }
-  })
-
-  res.json({ id, message: 'Generation started', topic })
+  } catch (error) {
+    console.log(`\n❌ ERREUR: ${error.message}`)
+    gen.status = 'error'
+    gen.progress = 'Erreur'
+    gen.error = error.message
+  }
 })
 
 /**
  * GET /status/:id
- * Get the status of a generation
  */
 app.get('/status/:id', (req, res) => {
   const gen = generations.get(req.params.id)
-
   if (!gen) {
     return res.status(404).json({ error: 'Generation not found' })
   }
-
-  // Return status without full logs (unless requested)
   const { logs, ...status } = gen
-  res.json({
-    ...status,
-    logsCount: logs.length
-  })
+  res.json({ ...status, logsCount: logs.length })
 })
 
 /**
  * GET /result/:id
- * Get the result of a completed generation
  */
 app.get('/result/:id', (req, res) => {
   const gen = generations.get(req.params.id)
-
   if (!gen) {
     return res.status(404).json({ error: 'Generation not found' })
   }
-
   if (gen.status !== 'completed') {
     return res.status(400).json({ error: 'Generation not completed', status: gen.status })
   }
-
   res.json(gen.result)
 })
 
 /**
  * GET /logs/:id
- * Get the logs of a generation
  */
 app.get('/logs/:id', (req, res) => {
   const gen = generations.get(req.params.id)
-
   if (!gen) {
     return res.status(404).json({ error: 'Generation not found' })
   }
-
   res.json({ logs: gen.logs })
 })
 
 /**
  * GET /health
- * Health check endpoint
  */
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', port: PORT })
+  res.json({ status: 'ok', port: PORT, mode: 'parallel' })
 })
 
 // Start server
 app.listen(PORT, () => {
   console.log(`
-╔════════════════════════════════════════════════════════════╗
-║                                                            ║
-║   🚀 CultureMaster Bridge Server                           ║
-║                                                            ║
-║   Port: ${PORT}                                              ║
-║   URL:  http://localhost:${PORT}                             ║
-║                                                            ║
-║   Endpoints:                                               ║
-║   • POST /generate     - Start fiche generation            ║
-║   • GET  /status/:id   - Check generation status           ║
-║   • GET  /result/:id   - Get completed result              ║
-║   • GET  /logs/:id     - Get generation logs               ║
-║   • GET  /health       - Health check                      ║
-║                                                            ║
-║   Ready to receive requests from the app!                  ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   🚀 CultureMaster Bridge Server (SMART PARALLEL)                 ║
+║                                                                   ║
+║   Port: ${PORT}                                                     ║
+║   URL:  http://localhost:${PORT}                                    ║
+║                                                                   ║
+║   Architecture:                                                   ║
+║   ┌────────────┐                                                  ║
+║   │ Recherche  │───┐  Phase 1     ┌────────┐     ┌───────────┐    ║
+║   └────────────┘   ├─────────────▶│ Fiche  │────▶│ Questions │    ║
+║         ║         │   (parallel)  │(+imgs) │     │(sur fiche)│    ║
+║   ┌────────────┐   │               └────────┘     └───────────┘    ║
+║   │   Images   │───┘                Phase 2         Phase 3       ║
+║   └────────────┘                                                  ║
+║                                                                   ║
+║   ✓ Questions basées sur le contenu réel de la fiche              ║
+║   ✓ Images placées aux bons endroits dans le texte                ║
+║                                                                   ║
+║   Endpoints:                                                      ║
+║   • POST /generate     - Lancer une génération                    ║
+║   • GET  /status/:id   - Vérifier statut & phase                  ║
+║   • GET  /result/:id   - Récupérer le résultat                    ║
+║   • GET  /logs/:id     - Voir les logs détaillés                  ║
+║   • GET  /health       - Health check                             ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
   `)
 })
