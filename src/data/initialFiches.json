@@ -513,6 +513,216 @@
       "createdAt": "2024-01-15T14:00:00Z",
       "lastStudied": null,
       "masteryLevel": 0
+    },
+    {
+      "id": "f-renaissance-italienne",
+      "categoryId": "histoire",
+      "subcategoryId": "moyen-age",
+      "title": "La Renaissance italienne",
+      "subtitle": "XIVe-XVIe siècle : L'éveil de l'Europe moderne",
+      "difficulty": 2,
+      "estimatedTime": 15,
+      "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+      "objectives": [
+        "Comprendre les origines et les causes de la Renaissance",
+        "Identifier les artistes majeurs et leurs œuvres",
+        "Connaître le rôle des Médicis dans le mécénat artistique"
+      ],
+      "sections": [
+        {
+          "id": "sec-001",
+          "type": "text",
+          "title": "Qu'est-ce que la Renaissance ?",
+          "content": {
+            "paragraphs": [
+              "La Renaissance (du mot italien 'Rinascimento' = renaissance) est un mouvement culturel, artistique et intellectuel qui naît en Italie au XIVe siècle et s'épanouit aux XVe et XVIe siècles.",
+              "L'idée centrale : redécouvrir la grandeur de l'Antiquité gréco-romaine, oubliée pendant le Moyen Âge. Les artistes et penseurs veulent 'renaître' en s'inspirant des Anciens.",
+              "Pourquoi en Italie ? Les ruines romaines sont partout, les cités-États sont riches grâce au commerce, des mécènes puissants financent les artistes, et la chute de Constantinople (1453) fait affluer les savants grecs."
+            ]
+          },
+          "animation": { "type": "fadeIn", "delay": 0, "trigger": "onView" }
+        },
+        {
+          "id": "sec-002",
+          "type": "timeline",
+          "title": "Chronologie de la Renaissance",
+          "content": {
+            "events": [
+              { "date": "1307-1321", "event": "Divine Comédie de Dante", "importance": "major", "details": "Premier chef-d'œuvre en langue italienne" },
+              { "date": "1420-1436", "event": "Dôme de Florence", "importance": "major", "details": "Brunelleschi révolutionne l'architecture" },
+              { "date": "1434", "event": "Cosme de Médicis au pouvoir", "importance": "major", "details": "Début de l'âge d'or florentin" },
+              { "date": "1452", "event": "Naissance de Léonard de Vinci", "importance": "major", "details": "Le futur génie universel" },
+              { "date": "1475", "event": "Naissance de Michel-Ange", "importance": "major", "details": "Le futur 'divin' Michel-Ange" },
+              { "date": "1504", "event": "David de Michel-Ange", "importance": "major", "details": "Chef-d'œuvre de 5 mètres dévoilé à Florence" },
+              { "date": "1508-1512", "event": "Chapelle Sixtine", "importance": "major", "details": "Michel-Ange peint le plafond en 4 ans" },
+              { "date": "1503-1519", "event": "La Joconde", "importance": "major", "details": "Léonard peint le portrait le plus célèbre" },
+              { "date": "1527", "event": "Sac de Rome", "importance": "major", "details": "Fin symbolique de la Haute Renaissance" }
+            ]
+          },
+          "animation": { "type": "slideIn", "delay": 100, "trigger": "onView" }
+        },
+        {
+          "id": "sec-003",
+          "type": "comparison",
+          "title": "Les trois génies de la Renaissance",
+          "content": {
+            "description": "Trois artistes dominent la Haute Renaissance. Leurs rivalités sont légendaires.",
+            "items": [
+              {
+                "name": "Léonard de Vinci",
+                "icon": "🎨",
+                "color": "#8B4513",
+                "characteristics": [
+                  "1452-1519 : Génie universel",
+                  "Peintre, ingénieur, anatomiste, inventeur",
+                  "Style : Sfumato (transitions douces)",
+                  "Chef-d'œuvre : La Joconde, La Cène",
+                  "Il écrivait en miroir pour protéger ses notes"
+                ]
+              },
+              {
+                "name": "Michel-Ange",
+                "icon": "🗿",
+                "color": "#4169E1",
+                "characteristics": [
+                  "1475-1564 : Il Divino",
+                  "Sculpteur, peintre, architecte, poète",
+                  "Style : Terribilità (puissance, muscles)",
+                  "Chef-d'œuvre : David, Chapelle Sixtine",
+                  "A peint la Sixtine DEBOUT, pas couché !"
+                ]
+              },
+              {
+                "name": "Raphaël",
+                "icon": "👼",
+                "color": "#FFD700",
+                "characteristics": [
+                  "1483-1520 : Le prince des peintres",
+                  "Maître de la grâce et de l'harmonie",
+                  "Style : Synthèse parfaite, équilibre",
+                  "Chef-d'œuvre : L'École d'Athènes",
+                  "Mort à 37 ans, adoré de tous"
+                ]
+              }
+            ]
+          },
+          "animation": { "type": "slideIn", "delay": 100, "trigger": "onView" }
+        },
+        {
+          "id": "sec-004",
+          "type": "quote",
+          "title": "La rivalité légendaire",
+          "content": {
+            "quote": "Michel-Ange me méprise parce que je suis peintre et lui sculpteur. Et moi je le méprise parce qu'il ne se lave pas.",
+            "author": "Léonard de Vinci (attribué)",
+            "context": "En 1504, Florence organise un duel artistique : Léonard et Michel-Ange doivent décorer face à face deux murs du Palazzo Vecchio. Aucun des deux n'a terminé, mais cette rivalité les a poussés à se surpasser.",
+            "significance": "Cette citation illustre la compétition féroce entre les artistes de la Renaissance, qui a stimulé leur créativité."
+          },
+          "animation": { "type": "fadeIn", "delay": 200, "trigger": "onView" }
+        },
+        {
+          "id": "sec-005",
+          "type": "text",
+          "title": "Les Médicis : banquiers de l'art",
+          "content": {
+            "paragraphs": [
+              "Sans les Médicis, pas de Renaissance florentine. Cette famille de banquiers a financé pratiquement tous les grands artistes.",
+              "Cosme l'Ancien (1389-1464) : Fondateur de la dynastie, il finance Brunelleschi, Donatello et crée la Bibliothèque Laurentienne.",
+              "Laurent le Magnifique (1449-1492) : L'apogée ! Poète lui-même, il protège Botticelli et le jeune Michel-Ange qui vit dans son palais.",
+              "Fun fact : Deux Médicis sont devenus papes (Léon X et Clément VII) et deux sont devenues reines de France (Catherine et Marie de Médicis) !"
+            ]
+          },
+          "animation": { "type": "fadeIn", "delay": 100, "trigger": "onView" }
+        },
+        {
+          "id": "sec-006",
+          "type": "interactive",
+          "title": "Les révolutions techniques",
+          "content": {
+            "interactiveType": "cards",
+            "elements": [
+              {
+                "id": "perspective",
+                "label": "La Perspective",
+                "icon": "📐",
+                "description": "Brunelleschi (1415) : Pour la première fois, on peut représenter la profondeur sur une surface plate. Les lignes convergent vers un 'point de fuite'.",
+                "consequence": "Toute la peinture occidentale repose dessus"
+              },
+              {
+                "id": "sfumato",
+                "label": "Le Sfumato",
+                "icon": "🌫️",
+                "description": "Léonard de Vinci (~1500) : Technique de 'fumé' où les contours sont flous, les transitions douces. C'est ce qui donne à la Joconde son sourire mystérieux.",
+                "consequence": "Révolutionne le réalisme en peinture"
+              },
+              {
+                "id": "anatomie",
+                "label": "L'Anatomie",
+                "icon": "🫀",
+                "description": "Léonard, Vésale (XVe-XVIe) : Pour la première fois, des artistes dissèquent des cadavres pour comprendre le corps humain.",
+                "consequence": "Les corps peints et sculptés deviennent réalistes"
+              },
+              {
+                "id": "contrapposto",
+                "label": "Le Contrapposto",
+                "icon": "🧍",
+                "description": "Donatello, Michel-Ange (~1440) : Pose naturelle où le poids repose sur une jambe. La hanche et les épaules sont désaxées.",
+                "consequence": "Les statues semblent vivantes, pas figées"
+              }
+            ]
+          },
+          "animation": { "type": "reveal", "delay": 100, "trigger": "onClick" }
+        },
+        {
+          "id": "sec-007",
+          "type": "text",
+          "title": "L'héritage de la Renaissance",
+          "content": {
+            "paragraphs": [
+              "La Renaissance italienne a changé le monde :",
+              "L'art : La perspective, le réalisme, l'émotion - tout l'art occidental en découle.",
+              "La science : L'observation, l'expérimentation, le questionnement.",
+              "L'humanisme : L'homme au centre, capable de comprendre et transformer le monde.",
+              "Citation à retenir : 'L'homme peut tout ce qu'il veut, s'il veut ce qu'il peut.' — Léon Battista Alberti"
+            ]
+          },
+          "animation": { "type": "fadeIn", "delay": 100, "trigger": "onView" }
+        }
+      ],
+      "keyPoints": [
+        "La Renaissance naît à Florence au XIVe siècle",
+        "Trois génies dominent : Léonard, Michel-Ange, Raphaël",
+        "Les Médicis financent la plupart des artistes majeurs",
+        "Innovations : perspective, sfumato, anatomie, contrapposto",
+        "Le Sac de Rome (1527) marque la fin de la Haute Renaissance"
+      ],
+      "mnemonics": [
+        {
+          "type": "phrase",
+          "content": "LMR = Léonard Michel-Ange Raphaël",
+          "explanation": "Les trois génies dans l'ordre chronologique de naissance : 1452, 1475, 1483"
+        },
+        {
+          "type": "association",
+          "content": "Médicis = Médecins de l'art",
+          "explanation": "Ils ont 'soigné' et fait vivre l'art de la Renaissance"
+        },
+        {
+          "type": "visual",
+          "content": "La Joconde sourit car Léonard utilisait le sfumato = sourire fumé",
+          "explanation": "Le sfumato crée le mystère du sourire de Mona Lisa"
+        }
+      ],
+      "relatedTopics": [
+        "La République romaine",
+        "L'humanisme",
+        "Les Médicis",
+        "L'art baroque"
+      ],
+      "quiz": ["ren-001", "ren-002", "ren-003", "ren-004", "ren-005"],
+      "createdAt": "2024-12-14T10:00:00Z",
+      "lastStudied": null,
+      "masteryLevel": 0
     }
   ]
 }
