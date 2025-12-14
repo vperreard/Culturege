@@ -69,11 +69,12 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
 
     console.log(`\n${emoji} [${label}] Démarrage...`)
 
-    // Use -p flag with prompt passed via stdin for long prompts
-    const claude = spawn('claude', ['-p'], {
+    // DEBUG MODE: Run Claude with visible output in terminal
+    // Use 'inherit' for stdout/stderr so we see everything
+    const claude = spawn('claude', ['-p', prompt], {
       cwd: PROJECT_ROOT,
       env: { ...process.env },
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'inherit', 'inherit']  // stdin:pipe, stdout:inherit, stderr:inherit
     })
 
     if (!claude.pid) {
@@ -83,63 +84,22 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
     }
 
     console.log(`   ${emoji} [${label}] 🔧 PID: ${claude.pid}`)
+    console.log(`   ${emoji} [${label}] 👀 Mode DEBUG: output visible dans le terminal`)
+    console.log(`   ${emoji} [${label}] ─────────────────────────────────────────────`)
 
-    // Write prompt to stdin
-    claude.stdin.write(prompt)
-    claude.stdin.end()
-    console.log(`   ${emoji} [${label}] 📝 Prompt envoyé (${prompt.length} chars)`)
-
-    let output = ''
-    let errorOutput = ''
-    let activityCount = 0
     const startTime = Date.now()
-    let lastLogTime = Date.now()
 
-    // Heartbeat every 30 seconds to show it's still running
-    const heartbeat = setInterval(() => {
-      const elapsed = ((Date.now() - startTime) / 1000).toFixed(0)
-      console.log(`   ${emoji} [${label}] ⏳ En cours... (${elapsed}s, ${activityCount} activités)`)
-    }, 30000)
-
-    claude.stdout.on('data', (data) => {
-      const text = data.toString()
-      output += text
-      activityCount++
-
-      // Log activity periodically
-      if (Date.now() - lastLogTime > 10000) {
-        const preview = text.substring(0, 80).replace(/\n/g, ' ').trim()
-        if (preview) {
-          console.log(`   ${emoji} [${label}] 📤 "${preview}..."`)
-        }
-        lastLogTime = Date.now()
-      }
-
-      // Detect specific actions in output
-      if (text.includes('WebSearch') || text.includes('searching')) {
-        gen.progress = `[${label}] Recherche web...`
-      } else if (text.includes('Write') || text.includes('writing')) {
-        gen.progress = `[${label}] Écriture...`
-      } else if (text.includes('Read') || text.includes('reading')) {
-        gen.progress = `[${label}] Lecture...`
-      }
-    })
-
-    claude.stderr.on('data', (data) => {
-      const text = data.toString()
-      errorOutput += text
-      // Log stderr for debugging
-      console.log(`   ${emoji} [${label}] ⚠️ stderr: ${text.substring(0, 100)}`)
-    })
+    // With 'inherit', output goes directly to terminal - we don't capture it
+    // But we track time and wait for completion
 
     claude.on('close', async (code) => {
-      clearInterval(heartbeat)
       const duration = ((Date.now() - startTime) / 1000).toFixed(1)
 
-      console.log(`   ${emoji} [${label}] 📋 Terminé avec code: ${code}`)
+      console.log(`\n   ${emoji} [${label}] ─────────────────────────────────────────────`)
+      console.log(`   ${emoji} [${label}] 📋 Terminé avec code: ${code} (${duration}s)`)
 
       if (code === 0) {
-        console.log(`   ${emoji} [${label}] ✅ Succès (${duration}s)`)
+        console.log(`   ${emoji} [${label}] ✅ Succès !`)
 
         // Try to read output file if specified
         let result = null
@@ -147,29 +107,20 @@ function spawnClaudeTask(prompt, label, gen, outputFile = null) {
           try {
             const content = await fs.readFile(outputFile, 'utf-8')
             result = JSON.parse(content)
-            console.log(`   ${emoji} [${label}] 📁 Fichier lu: ${outputFile}`)
+            console.log(`   ${emoji} [${label}] 📁 Fichier trouvé: ${outputFile}`)
           } catch (e) {
-            console.log(`   ${emoji} [${label}] ⚠️ Fichier non trouvé, parsing output...`)
-            // Try to extract JSON from output
-            const jsonMatch = output.match(/\{[\s\S]*\}/)
-            if (jsonMatch) {
-              try {
-                result = JSON.parse(jsonMatch[0])
-              } catch (e2) { /* ignore */ }
-            }
+            console.log(`   ${emoji} [${label}] ⚠️ Fichier non trouvé: ${outputFile}`)
           }
         }
 
-        resolve({ output, toolCalls: activityCount, duration: parseFloat(duration), result })
+        resolve({ output: '', toolCalls: 0, duration: parseFloat(duration), result })
       } else {
         console.log(`   ${emoji} [${label}] ❌ Erreur (code: ${code})`)
-        console.log(`   ${emoji} [${label}] ❌ stderr: ${errorOutput.substring(0, 200)}`)
-        reject(new Error(errorOutput || `Process exited with code ${code}`))
+        reject(new Error(`Process exited with code ${code}`))
       }
     })
 
     claude.on('error', (err) => {
-      clearInterval(heartbeat)
       console.log(`   ${emoji} [${label}] ❌ Spawn error: ${err.message}`)
       reject(err)
     })
